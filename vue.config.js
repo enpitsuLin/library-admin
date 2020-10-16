@@ -7,7 +7,7 @@ function resolve(dir) {
 module.exports = {
     css: {
         loaderOptions: {
-            // 向 CSS 相关的 loader 传递选项
+            // 开启 less-loader
             less: {
                 javascriptEnabled: true
             }
@@ -16,7 +16,6 @@ module.exports = {
     chainWebpack: (config) => {
         config.resolve.alias
             .set('@', resolve('./src'))
-            //set第一个参数：设置的别名，第二个参数：设置的路径
-    }
 
+    }
 }
