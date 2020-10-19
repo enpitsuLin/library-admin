@@ -1,0 +1,151 @@
+<template>
+  <pro-layout
+    :menus="menus"
+    :collapsed="collapsed"
+    :mediaQuery="query"
+    :isMobile="isMobile"
+    :handleMediaQuery="handleMediaQuery"
+    :handleCollapse="handleCollapse"
+    :i18nRender="i18nRender"
+    v-bind="settings"
+  >
+    <template v-slot:menuHeaderRender>
+      <div>
+        <img src="@/assets/logo.svg" />
+        <h1>NBUFE Library</h1>
+      </div>
+    </template>
+    <template v-slot:rightContentRender
+      ><right-content
+        :top-menu="settings.layout === 'topmenu'"
+        :is-mobile="isMobile"
+        :theme="settings.theme"
+      />
+    </template>
+    <template v-slot:footerRender>
+      <div>footerRender</div>
+    </template>
+    <setting-drawer :settings="settings" @change="handleSettingChange" />
+
+    <router-view />
+  </pro-layout>
+</template>
+<script>
+import ProLayout, {
+  SettingDrawer,
+  updateTheme,
+} from "@ant-design-vue/pro-layout";
+import { i18nRender } from "@/locales";
+import { asyncRouterMap } from "@/config/router.config.js";
+
+import RightContent from "@/components/Header/RightContent";
+import defaultSettings from "@/config/defaultSettings";
+
+export default {
+  name: "DashboardLayout",
+  components: { ProLayout, SettingDrawer, RightContent },
+  data() {
+    return {
+      // preview.pro.antdv.com only use.
+      isProPreviewSite:
+        process.env.VUE_APP_PREVIEW === "true" &&
+        process.env.NODE_ENV !== "development",
+      // end
+
+      // base
+      menus: [],
+      // 侧栏收起状态
+      collapsed: false,
+      title: defaultSettings.title,
+
+      // 媒体查询
+      query: {},
+
+      // 是否手机模式
+      isMobile: false,
+      settings: {
+        // 布局类型
+        layout: defaultSettings.layout, // 'sidemenu', 'topmenu'
+        // CONTENT_WIDTH_TYPE
+        contentWidth:
+          defaultSettings.layout === "sidemenu"
+            ? "Fluid"
+            : defaultSettings.contentWidth,
+        // 主题 'dark' | 'light'
+        theme: defaultSettings.navTheme,
+        // 主色调
+        primaryColor: defaultSettings.primaryColor,
+        fixedHeader: defaultSettings.fixedHeader,
+        fixSiderbar: defaultSettings.fixSiderbar,
+        colorWeak: defaultSettings.colorWeak,
+
+        hideHintAlert: false,
+        hideCopyButton: false,
+      },
+    };
+  },
+  created() {
+    const routes = asyncRouterMap.find((item) => item.path === "/");
+    this.menus = (routes && routes.children) || [];
+  },
+  mounted() {
+    const userAgent = navigator.userAgent;
+    if (userAgent.indexOf("Edge") > -1) {
+      this.$nextTick(() => {
+        this.collapsed = !this.collapsed;
+        setTimeout(() => {
+          this.collapsed = !this.collapsed;
+        }, 16);
+      });
+    }
+
+    // first update color
+    // TIPS: THEME COLOR HANDLER!! PLEASE CHECK THAT!!
+    if (
+      process.env.NODE_ENV !== "production" ||
+      process.env.VUE_APP_PREVIEW === "true"
+    ) {
+      updateTheme(this.settings.primaryColor);
+    }
+  },
+
+  methods: {
+    i18nRender,
+    handleMediaQuery(query) {
+      this.query = query;
+      if (this.isMobile && !query["screen-xs"]) {
+        this.isMobile = false;
+        return;
+      }
+      if (!this.isMobile && query["screen-xs"]) {
+        this.isMobile = true;
+        this.collapsed = false;
+      }
+    },
+    handleCollapse(collapsed) {
+      this.collapsed = collapsed;
+    },
+    handleSettingChange({ type, value }) {
+      console.log("type", type, value);
+      type && (this.settings[type] = value);
+      switch (type) {
+        case "contentWidth":
+          this.settings[type] = value;
+          break;
+        case "layout":
+          if (value === "sidemenu") {
+            this.settings.contentWidth = "Fluid";
+          } else {
+            this.settings.fixSiderbar = false;
+            this.settings.contentWidth = "Fixed";
+          }
+          break;
+      }
+    },
+  },
+};
+</script>
+
+<style lang="less">
+@import "./DashboardLayout.less";
+</style>
