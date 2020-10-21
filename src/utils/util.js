@@ -5,7 +5,7 @@ export function timeFix() {
 }
 
 export function welcome() {
-    const arr = ['休息一会儿吧', '准备吃什么呢?', '我猜你可能累了']
+    const arr = ['休息一会儿吧', '准备吃什么呢?', '我猜你可能累了', '摸一会鱼如何?']
     const index = Math.floor(Math.random() * arr.length)
     return arr[index]
 }

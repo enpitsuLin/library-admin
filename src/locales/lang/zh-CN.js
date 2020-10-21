@@ -17,7 +17,9 @@ const locale = {
     'menu.management': '数据管理',
     'menu.management.book': '藏书管理',
     'menu.management.user': '用户管理',
-    'menu.staff': '员工管理',
+    'menu.account': '个人页',
+    'menu.account.profile': '个人中心',
+    'menu.account.profile.base': '基础设置',
 
 
     'navBar.lang': '更改语言',

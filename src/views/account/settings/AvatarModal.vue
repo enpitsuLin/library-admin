@@ -10,6 +10,11 @@
   >
     <a-row>
       <a-col :xs="24" :md="12" :style="{ height: '350px' }">
+        <div class="avatar-upload-preview">
+          <img :src="previews.url" :style="previews.img" />
+        </div>
+      </a-col>
+      <a-col :xs="24" :md="12" :style="{ height: '350px' }">
         <vue-cropper
           ref="cropper"
           :img="options.img"
@@ -22,15 +27,10 @@
         >
         </vue-cropper>
       </a-col>
-      <a-col :xs="24" :md="12" :style="{ height: '350px' }">
-        <div class="avatar-upload-preview">
-          <img :src="previews.url" :style="previews.img" />
-        </div>
-      </a-col>
     </a-row>
     <br />
     <a-row>
-      <a-col :lg="2" :md="2">
+      <a-col :xs="8" :md="6">
         <a-upload
           name="file"
           :beforeUpload="beforeUpload"
@@ -39,21 +39,18 @@
           <a-button icon="upload">选择图片</a-button>
         </a-upload>
       </a-col>
-      <a-col :lg="{ span: 1, offset: 2 }" :md="2">
-        <a-button icon="plus" @click="changeScale(1)" />
+
+      <a-col :xs="12" :md="6">
+        <a-button-group>
+          <a-button icon="plus" @click="changeScale(1)" />
+          <a-button icon="minus" @click="changeScale(-1)" />
+          <a-button icon="undo" @click="rotateLeft" />
+          <a-button icon="redo" @click="rotateRight" />
+        </a-button-group>
       </a-col>
-      <a-col :lg="{ span: 1, offset: 1 }" :md="2">
-        <a-button icon="minus" @click="changeScale(-1)" />
-      </a-col>
-      <a-col :lg="{ span: 1, offset: 1 }" :md="2">
-        <a-button icon="undo" @click="rotateLeft" />
-      </a-col>
-      <a-col :lg="{ span: 1, offset: 1 }" :md="2">
-        <a-button icon="redo" @click="rotateRight" />
-      </a-col>
-      <a-col :lg="{ span: 2, offset: 6 }" :md="2">
-        <a-button type="primary" @click="finish('blob')">保存</a-button>
-      </a-col>
+      <a-col :xs="4" :md="{ span: '2', offset: '10' }"
+        ><a-button type="primary" @click="finish('blob')">保存</a-button></a-col
+      >
     </a-row>
   </a-modal>
 </template>
@@ -124,7 +121,7 @@ export default {
           const img = window.URL.createObjectURL(data);
           this.model = true;
           this.modelSrc = img;
-          
+
           formData.append("file", data, this.fileName);
           this.$http
             .post("api/admin/uploadavatar", formData, {
@@ -173,7 +170,8 @@ export default {
 .avatar-upload-preview {
   position: absolute;
   top: 50%;
-  transform: translate(50%, -50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 180px;
   height: 180px;
   border-radius: 50%;

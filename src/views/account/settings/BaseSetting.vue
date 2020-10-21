@@ -3,7 +3,7 @@
     <a-row :gutter="16"
       ><a-col
         :md="24"
-        :lg="8"
+        :lg="{ span: '8', push: '16' }"
         :style="{ minHeight: '180px', marginBottom: '20px' }"
       >
         <div class="ant-upload-preview" @click="$refs.modal.edit(1)">
@@ -14,7 +14,7 @@
           <img :src="option.img" />
         </div>
       </a-col>
-      <a-col :md="24" :lg="16">
+      <a-col :md="24" :lg="{ span: '16', pull: '8' }">
         <a-form layout="vertical">
           <a-form-item label="昵称">
             <a-input :placeholder="currentUser.name" />

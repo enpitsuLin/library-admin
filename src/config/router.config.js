@@ -18,7 +18,7 @@ export const asyncRouterMap = [{
                 name: 'dashboard',
                 redirect: '/dashboard/workplace',
                 component: RouteView,
-                meta: { title: 'menu.dashboard', keepAlive: true, icon: 'appstore' },
+                meta: { title: 'menu.dashboard', keepAlive: true, icon: 'desktop' },
                 children: [{
                         path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
                         name: 'Analysis',
@@ -50,24 +50,18 @@ export const asyncRouterMap = [{
                 children: [{
                         path: 'managerment/book',
                         name: 'Book',
+                        component: () =>
+                            import ('@/views/management/books'),
                         meta: { title: 'menu.management.book', keepAlive: true },
-                        children: []
                     },
                     {
                         path: 'managerment/user',
                         name: 'User',
+                        component: () =>
+                            import ('@/views/management/users'),
                         meta: { title: 'menu.management.user', keepAlive: true },
-                        children: []
-
                     }
                 ]
-            },
-            {
-                path: '/staff',
-                name: 'staff',
-                component: RouteView,
-                meta: { title: 'menu.staff', keepAlive: true, icon: 'user' },
-                children: []
             },
             // account
             {
@@ -75,21 +69,21 @@ export const asyncRouterMap = [{
                 component: RouteView,
                 redirect: '/account/center',
                 name: 'account',
-                meta: { title: '个人页', icon: 'user', keepAlive: true },
+                meta: { title: 'menu.account', icon: 'user', keepAlive: true },
                 children: [
                     /* {
-                                            path: '/account/center',
-                                            name: 'center',
-                                            component: () =>
-                                                import ('@/views/account/center'),
-                                            meta: { title: '个人中心', keepAlive: true }
-                                        }, */
+                        path: '/account/center',
+                        name: 'center',
+                        component: () =>
+                            import ('@/views/account/center'),
+                        meta: { title: '个人中心', keepAlive: true }
+                    }, */
                     {
                         path: '/account/settings',
                         name: 'settings',
                         component: () =>
                             import ('@/views/account/settings/Index'),
-                        meta: { title: '个人设置', hideHeader: true },
+                        meta: { title: 'menu.account.profile', hideHeader: true },
                         redirect: '/account/settings/base',
                         hideChildrenInMenu: true,
                         children: [{
@@ -97,7 +91,7 @@ export const asyncRouterMap = [{
                                 name: 'BaseSettings',
                                 component: () =>
                                     import ('@/views/account/settings/BaseSetting'),
-                                meta: { title: '基本设置', hidden: true }
+                                meta: { title: 'menu.account.profile.base', hidden: true }
                             },
                             /*
                             {

@@ -11,8 +11,8 @@
             @openChange="onOpenChange"
           >
             <a-menu-item key="/account/settings/base">
-              <router-link :to="{ name: 'BaseSettings' }">
-                基本设置
+              <router-link :to="{ name: 'BaseSettings' }" v-slot="{route}">
+                {{ i18nRender(route.meta.title) }}
               </router-link>
             </a-menu-item>
              <!-- 
@@ -42,7 +42,7 @@
         </div>
         <div class="account-settings-info-right">
           <div class="account-settings-info-title">
-            <span>{{ $route.meta.title }}</span>
+            <span>{{ i18nRender($route.meta.title) }}</span>
           </div>
           <route-view></route-view>
         </div>
@@ -54,6 +54,7 @@
 <script>
 import { RouteView } from '@/layouts'
 import { baseMixin } from '@/store/app-mixin'
+import { i18nRender } from "@/locales";
 
 export default {
   components: {
@@ -93,6 +94,7 @@ export default {
     this.updateMenu()
   },
   methods: {
+    i18nRender,
     onOpenChange (openKeys) {
       this.openKeys = openKeys
     },

@@ -14,6 +14,13 @@ const locale = {
     'menu.dashboard.analysis': 'Analysis',
     'menu.dashboard.monitor': 'Monitor',
     'menu.dashboard.workplace': 'Workplace',
+    'menu.management': 'Data',
+    'menu.management.book': 'Books',
+    'menu.management.user': 'Users',
+    'menu.account': 'Account',
+    'menu.account.profile': 'Profile',
+    'menu.account.profile.base': 'Base Setting',
+
 
     'navBar.lang': 'Change Language',
 

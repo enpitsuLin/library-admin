@@ -13,26 +13,18 @@
         @change="handleTabClick"
       >
         <a-tab-pane key="tab1" tab="账号密码登录">
-          <a-alert
-            v-if="isLoginError"
-            type="error"
-            showIcon
-            style="margin-bottom: 24px"
-            message="账户或密码错误"
-          />
+          <!-- 错误提示 -->
+          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px" message="账户或密码错误" />
 
           <a-form-item>
             <a-input
               type="text"
               size="large"
-              placeholder="账户名或邮箱"
+              placeholder="账户名"
               v-decorator="[
                 'username',
                 {
-                  rules: [
-                    { required: true, message: '请输入帐户名或邮箱地址' },
-                    { validator: handleUsernameOrEmail },
-                  ],
+                  rules: [{ required: true, message: '请输入帐户名' }],
                   validateTrigger: 'change',
                 },
               ]"
@@ -164,32 +156,20 @@ export default {
       customActiveKey: "tab1",
       loginBtn: false,
       // login type: 0 email, 1 username, 2 telephone
-      loginType: 0,
+
       isLoginError: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
-        loginType: 0,
       },
     };
   },
   methods: {
     ...mapActions(["Login", "Logout"]),
-    handleUsernameOrEmail(rule, value, callback) {
-      const { state } = this;
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-      if (regex.test(value)) {
-        state.loginType = 0;
-      } else {
-        state.loginType = 1;
-      }
-      callback();
-    },
     handleTabClick(key) {
       this.customActiveKey = key;
-      // this.form.resetFields()
     },
     handleSubmit(e) {
       e.preventDefault();
@@ -214,13 +194,11 @@ export default {
         },
         (err, values) => {
           if (!err) {
-            //console.log("login form", values);
             const loginParams = {
               ...values,
             };
             delete loginParams.username;
-            loginParams[!state.loginType ? "email" : "username"] =
-              values.username;
+            loginParams["username"] = values.username;
             loginParams.password = values.password; //md5(values.password);
             Login(loginParams)
               .then((res) => this.loginSuccess(res))
