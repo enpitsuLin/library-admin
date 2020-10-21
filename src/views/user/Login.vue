@@ -109,7 +109,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["Login"]),
+        ...mapActions(["Login", 'Logout']),
         handleUsernameOrEmail(rule, value, callback) {
             const {
                 state
@@ -170,8 +170,9 @@ export default {
                 }
             );
         },
+        // eslint-disable-next-line no-unused-vars
         loginSuccess(res) {
-            console.log(res);
+            //console.log(res);
             // check res.homePage define, set $router.push name res.homePage
             // Why not enter onComplete
             /*

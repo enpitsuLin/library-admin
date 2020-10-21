@@ -16,16 +16,27 @@ module.exports = {
     chainWebpack: (config) => {
         config.resolve.alias
             .set('@', resolve('./src'))
-
+        config.plugin('html')
+            .tap(args => {
+                args[0].title = "宁财院图书馆 - NBUFE Library admin";
+                return args;
+            })
     },
     devServer: {
         port: 8080,
         proxy: {
             '/api': {
-                target: 'http://localhost:3000/',
+                target: 'http://10.173.2.137:3000/', //'http://localhost:3000',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''
+                }
+            },
+            '/uploads': {
+                target: 'http://10.173.2.137:3000/uploads/', //'http://localhost:3000',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/uploads': ''
                 }
             }
         }

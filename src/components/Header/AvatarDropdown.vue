@@ -3,7 +3,7 @@
     <span class="ant-pro-account-avatar">
       <a-avatar
         size="small"
-        src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
+        :src="currentUser.avatar"
         class="antd-pro-global-header-index-avatar"
       />
       <span>{{ currentUser.name }}</span>

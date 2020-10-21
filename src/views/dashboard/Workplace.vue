@@ -10,7 +10,7 @@
             {{ timeFix }}，{{ user.name
             }}<span class="welcome-text">，{{ welcome }}</span>
           </div>
-          <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
+          <div>系统管理员 | 宁波财经学院 - 数工学院</div>
         </div>
       </div>
     </template>
@@ -140,6 +140,7 @@
 </template>
 
 <script>
+import { timeFix } from "@/utils/util";
 import { mapState } from "vuex";
 import { PageHeaderWrapper } from "@ant-design-vue/pro-layout";
 
@@ -150,7 +151,7 @@ export default {
   },
   data() {
     return {
-      timeFix: "下午好",
+      timeFix: timeFix(),
       avatar: "",
       user: {},
 
@@ -201,16 +202,20 @@ export default {
       radarData: [],
     };
   },
+  created() {
+    this.user = this.userInfo;
+    this.avatar = this.avatarsrc;
+  },
   computed: {
     ...mapState({
-      //nickname: (state) => state.user.nickname,
+      nickname: (state) => state.user.nickname,
       welcome: (state) => state.user.welcome,
+      avatarsrc: (state) => state.user.avatar,
     }),
     currentUser() {
       return {
-        name: "Serati Ma",
-        avatar:
-          "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png",
+        name: this.nickname,
+        avatar: "/uploads/avatar/" + this.avatar,
       };
     },
     userInfo() {

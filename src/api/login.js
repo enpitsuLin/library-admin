@@ -4,6 +4,7 @@ const userApi = {
     Login: '/admin/login',
     Logout: '/admin/logout',
     UserInfo: '/admin/info',
+    UploadAvatar: '/admin/uploadavatar'
 }
 
 
@@ -30,6 +31,15 @@ export function logout() {
         method: 'post',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
+        }
+    })
+}
+export function uploadAvatar() {
+    return request({
+        url: userApi.UploadAvatar,
+        method: 'post',
+        headers: {
+            "Content-Type": "multipart/form-data",
         }
     })
 }

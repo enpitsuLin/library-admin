@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import i18n from './locales'
 
-
+import './progress'
 import './core/use'
 import './global.less'
 import './utils/filter' // global filter

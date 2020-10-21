@@ -37,6 +37,7 @@ import ProLayout, {
 } from "@ant-design-vue/pro-layout";
 import { i18nRender } from "@/locales";
 import { asyncRouterMap } from "@/config/router.config.js";
+import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
 
 import RightContent from "@/components/Header/RightContent";
 import defaultSettings from "@/config/defaultSettings";
@@ -69,7 +70,7 @@ export default {
         // CONTENT_WIDTH_TYPE
         contentWidth:
           defaultSettings.layout === "sidemenu"
-            ? "Fluid"
+            ? CONTENT_WIDTH_TYPE.Fluid
             : defaultSettings.contentWidth,
         // 主题 'dark' | 'light'
         theme: defaultSettings.navTheme,
@@ -87,6 +88,13 @@ export default {
   created() {
     const routes = asyncRouterMap.find((item) => item.path === "/");
     this.menus = (routes && routes.children) || [];
+    // 处理侧栏收起状态
+    this.$watch('collapsed', () => {
+      this.$store.commit(SIDEBAR_TYPE, this.collapsed)
+    })
+    this.$watch('isMobile', () => {
+      this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
+    })
   },
   mounted() {
     const userAgent = navigator.userAgent;

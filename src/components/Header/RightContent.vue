@@ -12,7 +12,7 @@
 <script>
 import AvatarDropdown from "./AvatarDropdown";
 import SelectLang from "@/components/SelectLang/SelectLang";
-
+import { mapState } from "vuex";
 
 export default {
   name: "RightContent",
@@ -41,10 +41,19 @@ export default {
   data() {
     return {
       showMenu: true,
-      currentUser: {},
+      //currentUser: {},
     };
   },
   computed: {
+    ...mapState({
+      avatarsrc: (state) => state.user.avatar,
+    }),
+    currentUser() {
+      return {
+        name: this.userInfo.name,
+        avatar: "/uploads/avatar/" + this.avatarsrc,
+      };
+    },
     wrpCls() {
       return {
         "ant-pro-global-header-index-right": true,
@@ -53,13 +62,9 @@ export default {
         }`]: true,
       };
     },
-  },
-  mounted() {
-    setTimeout(() => {
-      this.currentUser = {
-        name: "Serati Ma",
-      };
-    }, 1500);
+    userInfo() {
+      return this.$store.getters.userInfo;
+    },
   },
 };
 </script>
