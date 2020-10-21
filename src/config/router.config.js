@@ -152,29 +152,11 @@ export const constantRouterMap = [{
         redirect: '/user/login',
         hidden: true,
         children: [{
-                path: 'login',
-                name: 'login',
-                component: () =>
-                    import ('@/views/user/Login')
-            },
-            /* {
-                path: 'register',
-                name: 'register',
-                component: () =>
-                    import ('@/views/user/Register')
-            },
-            {
-                path: 'register-result',
-                name: 'registerResult',
-                component: () =>
-                    import ('@/views/user/RegisterResult')
-            },
-            {
-                path: 'recover',
-                name: 'recover',
-                component: undefined
-            } */
-        ]
+            path: 'login',
+            name: 'login',
+            component: () =>
+                import ('@/views/user/Login')
+        }]
     },
 
     {

@@ -10,7 +10,7 @@ import { i18nRender } from '@/locales'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const allowList = ['login', 'register', 'registerResult'] // no redirect allowList
+const allowList = ['login'] // no redirect allowList
 const loginRoutePath = '/user/login'
 const defaultRoutePath = '/dashboard/workplace'
 
@@ -22,7 +22,6 @@ router.beforeEach((to, from, next) => {
         if (to.path === loginRoutePath) {
             next({ path: defaultRoutePath });
             NProgress.done()
-
         } else {
             // 如果当前store没有用户信息
             if (Object.keys(store.getters.userInfo).length === 0) {
@@ -58,5 +57,5 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(() => {
-    NProgress.done() // finish progress bar
+    NProgress.done()
 })
