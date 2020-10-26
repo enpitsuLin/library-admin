@@ -48,17 +48,17 @@ export const asyncRouterMap = [{
                 component: RouteView,
                 meta: { title: 'menu.management', keepAlive: true, icon: 'table' },
                 children: [{
-                        path: 'managerment/book',
+                        path: '/managerment/book',
                         name: 'Book',
                         component: () =>
-                            import ('@/views/management/books'),
+                            import ('@/views/management/books/index'),
                         meta: { title: 'menu.management.book', keepAlive: true },
                     },
                     {
-                        path: 'managerment/user',
+                        path: '/managerment/user',
                         name: 'User',
                         component: () =>
-                            import ('@/views/management/users'),
+                            import ('@/views/management/users/index'),
                         meta: { title: 'menu.management.user', keepAlive: true },
                     }
                 ]

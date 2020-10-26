@@ -23,7 +23,26 @@
       />
     </template>
     <template v-slot:footerRender>
-      <div>footerRender</div>
+      <global-footer class="footer custom-render">
+        <template v-slot:links>
+          <a
+            href="https://www.github.com/vueComponent/pro-layout"
+            target="_blank"
+            >Pro Layout</a
+          >
+          <a href="https://www.github.com/enpitsulin/" target="_blank"
+            >@enpitsulin</a
+          >
+        </template>
+        <template v-slot:copyright>
+          Copyright © 1999-2020
+          <a
+            href="http://opac.nbdhyu.edu.cn:8080/opac/search_adv.php#/index"
+            target="_blank"
+            >宁波财经学院图书馆</a
+          >
+        </template>
+      </global-footer>
     </template>
     <setting-drawer :settings="settings" @change="handleSettingChange" />
 
@@ -34,17 +53,22 @@
 import ProLayout, {
   SettingDrawer,
   updateTheme,
+  GlobalFooter,
 } from "@ant-design-vue/pro-layout";
 import { i18nRender } from "@/locales";
 import { asyncRouterMap } from "@/config/router.config.js";
-import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
+import {
+  CONTENT_WIDTH_TYPE,
+  SIDEBAR_TYPE,
+  TOGGLE_MOBILE_TYPE,
+} from "@/store/mutation-types";
 
 import RightContent from "@/components/Header/RightContent";
 import defaultSettings from "@/config/defaultSettings";
 
 export default {
   name: "DashboardLayout",
-  components: { ProLayout, SettingDrawer, RightContent },
+  components: { ProLayout, SettingDrawer, RightContent, GlobalFooter },
   data() {
     return {
       // preview.pro.antdv.com only use.
@@ -89,12 +113,12 @@ export default {
     const routes = asyncRouterMap.find((item) => item.path === "/");
     this.menus = (routes && routes.children) || [];
     // 处理侧栏收起状态
-    this.$watch('collapsed', () => {
-      this.$store.commit(SIDEBAR_TYPE, this.collapsed)
-    })
-    this.$watch('isMobile', () => {
-      this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
-    })
+    this.$watch("collapsed", () => {
+      this.$store.commit(SIDEBAR_TYPE, this.collapsed);
+    });
+    this.$watch("isMobile", () => {
+      this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile);
+    });
   },
   mounted() {
     const userAgent = navigator.userAgent;
