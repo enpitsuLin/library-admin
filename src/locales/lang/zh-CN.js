@@ -21,6 +21,7 @@ const locale = {
     'menu.account': '个人页',
     'menu.account.profile': '个人中心',
     'menu.account.profile.base': '基础设置',
+    'menu.account.profile.security': '安全设置',
 
 
     'navBar.lang': '更改语言',

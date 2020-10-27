@@ -21,6 +21,7 @@ const locale = {
     'menu.account': 'Account',
     'menu.account.profile': 'Profile',
     'menu.account.profile.base': 'Base Setting',
+    'menu.account.profile.security': 'Security Setting',
 
 
     'navBar.lang': 'Change Language',

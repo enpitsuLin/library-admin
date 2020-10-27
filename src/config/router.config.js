@@ -91,16 +91,17 @@ export const asyncRouterMap = [{
                                 name: 'BaseSettings',
                                 component: () =>
                                     import ('@/views/account/settings/BaseSetting'),
-                                meta: { title: 'menu.account.profile.base', hidden: true }
+                                meta: { title: 'menu.account.profile.base', hidden: true, keepAlive: true }
                             },
-                            /*
+
                             {
                                 path: '/account/settings/security',
                                 name: 'SecuritySettings',
                                 component: () =>
                                     import ('@/views/account/settings/Security'),
-                                meta: { title: '安全设置', hidden: true, keepAlive: true }
+                                meta: { title: 'menu.account.profile.security', hidden: true, keepAlive: true }
                             },
+                            /*
                                 {
                                 path: '/account/settings/custom',
                                 name: 'CustomSettings',
