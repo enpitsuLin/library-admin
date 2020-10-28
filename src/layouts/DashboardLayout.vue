@@ -12,7 +12,7 @@
     <template v-slot:menuHeaderRender>
       <div>
         <img src="@/assets/logo.svg" />
-        <h1>NBUFE Library</h1>
+        <h1>宁财院图书馆</h1>
       </div>
     </template>
     <template v-slot:rightContentRender

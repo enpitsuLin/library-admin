@@ -11,20 +11,48 @@
           <div class="mask">
             <a-icon type="plus" />
           </div>
-          <img :src="option.img" />
+          <img :src="avatarsrc" />
         </div>
       </a-col>
       <a-col :md="24" :lg="{ span: '16', pull: '8' }">
-        <a-form layout="vertical">
+        <a-form
+          :model="user"
+          layout="vertical"
+          :form="form"
+          @submit="handleSubmit"
+        >
           <a-form-item label="昵称">
-            <a-input :placeholder="currentUser.name" />
-          </a-form-item>
-          <a-form-item label="自我介绍">
-            <a-textarea rows="4" :placeholder="currentUser.introduction" />
+            <a-input
+              v-decorator="[
+                'name',
+                { rules: [{ required: false, message: '不能为空' }] },
+              ]"
+            />
           </a-form-item>
 
+          <a-form-item label="自我介绍">
+            <a-textarea rows="4" v-decorator="['introduction']" />
+          </a-form-item>
+          <a-row>
+            <a-col span="8">
+              <a-form-item label="性别">
+                <a-select v-decorator="['sex']">
+                  <a-select-option :value="0">保密</a-select-option>
+                  <a-select-option :value="1">男</a-select-option>
+                  <a-select-option :value="2">女</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col span="15" offset="1">
+              <a-form-item label="电子邮件">
+                <a-input v-decorator="['email']"></a-input>
+              </a-form-item>
+            </a-col>
+          </a-row>
           <a-form-item>
-            <a-button type="primary">保存</a-button>
+            <a-button htmlType="submit" type="primary" :loading="loading">
+              <span>保存</span>
+            </a-button>
           </a-form-item>
         </a-form>
       </a-col>
@@ -36,7 +64,7 @@
 
 <script>
 import AvatarModal from "./AvatarModal";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -44,52 +72,53 @@ export default {
   },
   data() {
     return {
-      user: {},
-      avatar: "",
-      // cropper
-      preview: {},
+      user: { name: "", sex: 0, introduction: "" },
+      avatarsrc: "",
       option: {
         img: "/avatar2.jpg",
-        info: true,
-        size: 1,
-        outputType: "jpeg",
-        canScale: false,
-        autoCrop: true,
-        // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 180,
-        autoCropHeight: 180,
-        fixedBox: true,
-        // 开启宽度和高度比例
-        fixed: true,
-        fixedNumber: [1, 1],
       },
+      form: this.$form.createForm(this),
+      loading: false,
     };
   },
   methods: {
+    ...mapActions(["GetInfo"]),
     setavatar(url) {
-      this.option.img = "/uploads/avatar/" + url;
+      this.avatarsrc = "/uploads/avatar/" + url;
       this.$store.commit("SET_AVATAR", url);
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.loading = true;
+      this.form.validateFields((error, values) => {
+        console.log(values);
+        if (!error) {
+          const data = values;
+          this.$http.post("/admin/updateinfo", data).then((response) => {
+            let res = response.result;
+            if (res.status === "done") {
+              this.GetInfo();
+              this.$message.success("修改成功");
+              this.loading = false;
+            }
+          });
+        }
+      });
     },
   },
   created() {
-    this.user = this.userInfo;
-    this.avatar = this.avatarsrc;
-    this.setavatar(this.avatar);
+    let { name, sex, email, introduction } = { ...this.info };
+    this.user = { name, sex, email, introduction: introduction || "" };
+    this.setavatar(this.info.avatar);
+  },
+  mounted: function () {
+    this.form.setFieldsValue(this.user);
   },
   computed: {
     ...mapState({
-      avatarsrc: (state) => state.user.avatar,
+      avatar: (state) => state.user.avatar,
+      info: (state) => state.user.info,
     }),
-    currentUser() {
-      return {
-        name: this.userInfo.name,
-        avatar: this.avatarsrc,
-        introduction: this.userInfo.introduction,
-      };
-    },
-    userInfo() {
-      return this.$store.getters.userInfo;
-    },
   },
 };
 </script>

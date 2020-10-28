@@ -22,6 +22,7 @@
           :autoCrop="options.autoCrop"
           :autoCropWidth="options.autoCropWidth"
           :autoCropHeight="options.autoCropHeight"
+          :outputType="options.outputType"
           :fixedBox="options.fixedBox"
           @realTime="realTime"
         >
@@ -64,11 +65,11 @@ export default {
       fileList: [],
       uploading: false,
       options: {
-        // img: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         img: "",
         autoCrop: true,
         autoCropWidth: 200,
         autoCropHeight: 200,
+        outputType: "jpeg",
         fixedBox: true,
       },
       previews: {},
@@ -124,7 +125,7 @@ export default {
 
           formData.append("file", data, this.fileName);
           this.$http
-            .post("api/admin/uploadavatar", formData, {
+            .post("/admin/uploadavatar", formData, {
               contentType: false,
               processData: false,
               headers: {
@@ -138,6 +139,7 @@ export default {
                 _this.$message.success("上传成功");
                 _this.$emit("ok", res.url);
                 _this.visible = false;
+                _this.options.img = "";
               }
             });
         });

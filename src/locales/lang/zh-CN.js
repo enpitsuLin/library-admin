@@ -19,7 +19,7 @@ const locale = {
     'menu.management.book': '藏书管理',
     'menu.management.user': '用户管理',
     'menu.account': '个人页',
-    'menu.account.profile': '个人中心',
+    'menu.account.profile': '个人设置',
     'menu.account.profile.base': '基础设置',
     'menu.account.profile.security': '安全设置',
 

@@ -11,14 +11,14 @@ export const TOGGLE_HIDE_HEADER = 'auto_hide_header'
 export const TOGGLE_COLOR = 'color'
 export const TOGGLE_WEAK = 'weak'
 export const TOGGLE_MULTI_TAB = 'multi_tab'
-export const APP_LANGUAGE = 'app_language'
+export const APP_LANGUAGE = 'lang'
 
 export const CONTENT_WIDTH_TYPE = {
-  Fluid: 'Fluid',
-  Fixed: 'Fixed'
+    Fluid: 'Fluid',
+    Fixed: 'Fixed'
 }
 
 export const NAV_THEME = {
-  LIGHT: 'light',
-  DARK: 'dark'
+    LIGHT: 'light',
+    DARK: 'dark'
 }
