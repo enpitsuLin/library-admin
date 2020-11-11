@@ -8,7 +8,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    bookData: Object,
+  },
+  data() {
+    return {
+      type: "",
+    };
+  },
+};
 </script>
 
 <style>

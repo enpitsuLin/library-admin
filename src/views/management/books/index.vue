@@ -4,33 +4,76 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="6" :sm="8">
+            <!-- item -->
+            <a-col :md="16" :sm="24">
               <a-form-item>
-                <a-select
-                  v-model="queryParam.type"
-                  placeholder="搜索方式"
-                  default-value="0"
-                >
-                  <a-select-option value="0">责任者</a-select-option>
-                  <a-select-option value="1">书名</a-select-option>
-                  <a-select-option value="2">出版社</a-select-option>
-                  <a-select-option value="3">ISBN</a-select-option>
-                  <a-select-option value="4">索书号</a-select-option>
-                </a-select>
+                <a-input-group compact>
+                  <a-select
+                    style="width: 35%"
+                    v-model="queryParam.type"
+                    placeholder="搜索方式"
+                    default-value="0"
+                  >
+                    <a-select-option value="0">责任者</a-select-option>
+                    <a-select-option value="1">书名</a-select-option>
+                    <a-select-option value="2">出版社</a-select-option>
+                    <a-select-option value="3">ISBN</a-select-option>
+                    <a-select-option value="4">索书号</a-select-option>
+                  </a-select>
+                  <a-input
+                    style="width: 65%"
+                    v-model="queryParam.key"
+                    placeholder=""
+                  ></a-input>
+                </a-input-group>
               </a-form-item>
             </a-col>
-            <a-col :md="12" :sm="16">
-              <a-form-item label="关键词">
-                <a-input v-model="queryParam.key" placeholder=""></a-input>
-              </a-form-item>
-            </a-col>
+
             <!-- button -->
-            <a-col :md="6">
-              <span>
-                <a-button type="primary">查询</a-button>
-                <a-button>重置</a-button>
+            <a-col :md="(!advanced && 8) || { span: 8 }" :sm="24">
+              <span
+                class="table-page-search-submitButtons"
+                
+              >
+                <a-button-group>
+                  <a-button type="primary">查询</a-button>
+                  <a-button>重置</a-button>
+                </a-button-group>
+                <a @click="advanced = !advanced" style="margin-left: 8px">
+                  {{ advanced ? "收起" : "展开" }}
+                  <a-icon :type="advanced ? 'up' : 'down'" />
+                </a>
               </span>
             </a-col>
+            <!-- advance item -->
+            <template v-if="advanced">
+              <a-col :md="8" :sm="24">
+                <a-form-item label="学科">
+                  <a-select placeholder="选择学科" v-model="queryParam.class">
+                    <a-select-option value="0">a</a-select-option>
+                    <a-select-option value="1">b</a-select-option>
+                    <a-select-option value="2">c</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="出版日期范围">
+                  <a-range-picker
+                    v-model="queryParam.fromDate"
+                    style="width: 100%"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="语言">
+                  <a-select placeholder="语言" v-model="queryParam.class">
+                    <a-select-option value="0">a</a-select-option>
+                    <a-select-option value="1">b</a-select-option>
+                    <a-select-option value="2">c</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </template>
           </a-row>
         </a-form>
       </div>
@@ -42,32 +85,31 @@
         :loading="loading"
         :pagination="pagination"
         size="small"
-        >
-          <span slot="creator" slot-scope="creators">
-            {{ process(creators) }}
-          </span>
-          <span slot="isbn" slot-scope="isbn">
-            {{ isbn.substr(0, 3) }}-{{ isbn.substr(3, 1) }}-{{
-              isbn.substr(4, 4)
-            }}-{{ isbn.substr(8, 4) }}-{{ isbn.substr(12, 1) }}
-          </span>
-          <span slot="action" slot-scope="record">
-            <a @click="$refs.modal.view(record)">查看</a>
-            <a-divider type="vertical" />
-            <a-dropdown>
-              <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-                更多<a-icon type="down" />
-              </a>
-              <a-menu slot="overlay">
-                <a-menu-item key="0">
-                  <a @click="$refs.modal.edit(record)">修改</a>
-                </a-menu-item>
-                <a-menu-divider />
-                <a-menu-item key="1"> 删除 </a-menu-item>
-              </a-menu>
-            </a-dropdown>
-          </span>
-        
+      >
+        <span slot="creator" slot-scope="creators">
+          {{ process(creators) }}
+        </span>
+        <span slot="isbn" slot-scope="isbn">
+          {{ isbn.substr(0, 3) }}-{{ isbn.substr(3, 1) }}-{{
+            isbn.substr(4, 4)
+          }}-{{ isbn.substr(8, 4) }}-{{ isbn.substr(12, 1) }}
+        </span>
+        <span slot="action" slot-scope="record">
+          <a @click="$refs.modal.view(record)">查看</a>
+          <a-divider type="vertical" />
+          <a-dropdown>
+            <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
+              更多<a-icon type="down" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item key="0">
+                <a @click="$refs.modal.edit(record)">修改</a>
+              </a-menu-item>
+              <a-menu-divider />
+              <a-menu-item key="1"> 删除 </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+        </span>
       </a-table>
     </a-card>
     <action-modal ref="modal" />
@@ -117,6 +159,7 @@ export default {
       queryParam: {},
       columns,
       filter: {}, //type: string
+      advanced: false,
     };
   },
   components: { ActionModal },
@@ -132,8 +175,8 @@ export default {
         const pagination = { ...this.pagination };
         pagination.total = res.length;
         this.loading = false;
-        for(let i of res){
-          i.creator = JSON.parse(i.creator)
+        for (let i of res) {
+          i.creator = JSON.parse(i.creator);
         }
         this.data = res;
         this.pagination = pagination;
