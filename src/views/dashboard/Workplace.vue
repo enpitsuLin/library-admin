@@ -63,15 +63,12 @@
             :body-style="{ padding: 0 }"
           >
             <div class="item-group">
-              <a>操作一</a>
-              <a>操作二</a>
-              <a>操作三</a>
+              <router-link to="/managerment/book">藏书管理</router-link>
+              <router-link to="/managerment/user">用户管理</router-link>
+              <router-link to="/account/settings/base">个人设置</router-link>
               <a>操作四</a>
               <a>操作五</a>
               <a>操作六</a>
-              <a-button size="small" type="primary" ghost icon="plus"
-                >添加</a-button
-              >
             </div>
           </a-card>
         </a-col>

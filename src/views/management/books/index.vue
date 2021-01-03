@@ -30,21 +30,27 @@
             </a-col>
 
             <!-- button -->
-            <a-col :md="(!advanced && 8) || { span: 8 }" :sm="24">
-              <span
-                class="table-page-search-submitButtons"
-                
-              >
+            <a-col :md="{ span: 4 }" :sm="{ span: 24 }">
+              <span class="table-page-search-submitButtons">
                 <a-button-group>
-                  <a-button type="primary">查询</a-button>
+                  <a-button @click="fetch" type="primary">查询</a-button>
                   <a-button>重置</a-button>
+                  <a-button
+                    type="primary"
+                    icon="plus"
+                    @click="$refs.new.show()"
+                  >
+                    新增图书
+                  </a-button>
                 </a-button-group>
+
                 <a @click="advanced = !advanced" style="margin-left: 8px">
                   {{ advanced ? "收起" : "展开" }}
                   <a-icon :type="advanced ? 'up' : 'down'" />
                 </a>
               </span>
             </a-col>
+
             <!-- advance item -->
             <template v-if="advanced">
               <a-col :md="8" :sm="24">
@@ -112,24 +118,28 @@
         </span>
       </a-table>
     </a-card>
-    <action-modal ref="modal" />
+    <view-modal ref="view" />
+    <new-modal ref="new" />
   </page-header-wrapper>
 </template>
 <script>
-import ActionModal from "./ActionModal";
+import NewModal from "./NewModal";
+import ViewModal from "./ViewModal";
 
 const columns = [
   {
     title: "编号",
     dataIndex: "no",
     sorter: (a, b) => a.no - b.no,
+    width: 70,
   },
-  { title: "书名", dataIndex: "title" },
+  { title: "书名", dataIndex: "title", width: 120 },
   {
     title: "责任者",
     dataIndex: "creator",
     scopedSlots: { customRender: "creator" },
-    width: 250,
+    ellipsis: true,
+    width: 200,
   },
   {
     title: "ISBN",
@@ -138,12 +148,12 @@ const columns = [
     width: 160,
   },
   { title: "分类号", dataIndex: "class", width: 60 },
-  { title: "出版社", dataIndex: "pub", ellipsis: true },
+  { title: "出版社", dataIndex: "pub", width: 180, ellipsis: true },
   { title: "索书号", dataIndex: "call", width: 120 },
   {
     title: "操作",
     key: "action",
-    scopedSlots: { customRender: "action", width: 60 },
+    scopedSlots: { customRender: "action", width: 60, fixed: "right" },
   },
 ];
 export default {
@@ -162,7 +172,7 @@ export default {
       advanced: false,
     };
   },
-  components: { ActionModal },
+  components: { NewModal, ViewModal },
   mounted() {
     this.fetch();
   },
