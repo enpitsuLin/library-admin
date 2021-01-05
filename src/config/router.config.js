@@ -50,17 +50,37 @@ export const asyncRouterMap = [{
                 children: [{
                         path: '/managerment/book',
                         name: 'Book',
-                        component: () =>
-                            import ('@/views/management/books/index'),
+                        component: RouteView,
+                        redirect: '/managerment/book/manage',
                         meta: { title: 'menu.management.book', keepAlive: true },
-                    },
-                    {
+                        children: [{
+                            path: '/managerment/book/manage',
+                            name: 'BookManage',
+                            component: () =>
+                                import ('@/views/management/books/index'),
+                            meta: { title: 'menu.management.book.manage', keepAlive: true },
+                        }, {
+                            path: '/managerment/book/add',
+                            name: 'BookAdd',
+                            component: () =>
+                                import ('@/views/management/books/AddBook'),
+                            meta: { title: 'menu.management.book.add', keepAlive: true },
+                        }, ]
+                    }, {
                         path: '/managerment/user',
                         name: 'User',
-                        component: () =>
-                            import ('@/views/management/users/index'),
+                        component: RouteView,
+                        redirect: '/managerment/user/manage',
                         meta: { title: 'menu.management.user', keepAlive: true },
-                    }
+                        children: [{
+                            path: '/managerment/user/manage',
+                            name: 'UserManage',
+                            component: () =>
+                                import ('@/views/management/users/index'),
+                            meta: { title: 'menu.management.user.manage', keepAlive: true },
+                        }]
+                    },
+
                 ]
             },
             // account

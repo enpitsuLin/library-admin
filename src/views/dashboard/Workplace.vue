@@ -10,7 +10,7 @@
             {{ timeFix }}，{{ user.name
             }}<span class="welcome-text">，{{ welcome }}</span>
           </div>
-          <div>系统管理员 | 宁波财经学院 - 数工学院</div>
+          <div>系统管理员 | 数字工程与技术学院</div>
         </div>
       </div>
     </template>
@@ -20,7 +20,7 @@
           <a-statistic title="今日网站访问量" :value="5600" />
         </div>
         <div class="stat-item">
-          <a-statistic title="馆藏书籍" :value="2223" />
+          <a-statistic title="馆藏书籍" :value="22233" />
         </div>
       </div>
     </template>
@@ -33,13 +33,9 @@
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in activities">
                 <a-list-item-meta>
-                  <a-avatar slot="avatar" :src="item.user.avatar" />
+                  <a-avatar slot="avatar" :src="item.avatar" />
                   <div slot="title">
-                    <span>{{ item.user.nickname }}</span
-                    >&nbsp; 在&nbsp;<a href="#">{{ item.project.name }}</a
-                    >&nbsp; <span>{{ item.project.action }}</span
-                    >&nbsp;
-                    <a href="#">{{ item.project.event }}</a>
+                    <span>{{ item.event }} </span>
                   </div>
                   <div slot="description">{{ item.time }}</div>
                 </a-list-item-meta>
@@ -90,50 +86,10 @@ export default {
       user: {},
 
       projects: [],
-      loading: true,
-      radarLoading: true,
-      activities: [],
-      teams: [],
+      loading: false,
 
-      // data
-      axis1Opts: {
-        dataKey: "item",
-        line: null,
-        tickLine: null,
-        grid: {
-          lineStyle: {
-            lineDash: null,
-          },
-          hideFirstLine: false,
-        },
-      },
-      axis2Opts: {
-        dataKey: "score",
-        line: null,
-        tickLine: null,
-        grid: {
-          type: "polygon",
-          lineStyle: {
-            lineDash: null,
-          },
-        },
-      },
-      scale: [
-        {
-          dataKey: "score",
-          min: 0,
-          max: 80,
-        },
-      ],
-      axisData: [
-        { item: "引用", a: 70, b: 30, c: 40 },
-        { item: "口碑", a: 60, b: 70, c: 40 },
-        { item: "产量", a: 50, b: 60, c: 40 },
-        { item: "贡献", a: 40, b: 50, c: 40 },
-        { item: "热度", a: 60, b: 70, c: 40 },
-        { item: "引用", a: 70, b: 50, c: 40 },
-      ],
-      radarData: [],
+      activities: [{ avatar: "avatar.jpg", event: "没有最新动态......" }],
+      teams: [],
     };
   },
   created() {

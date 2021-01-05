@@ -35,13 +35,6 @@
                 <a-button-group>
                   <a-button @click="fetch" type="primary">查询</a-button>
                   <a-button>重置</a-button>
-                  <a-button
-                    type="primary"
-                    icon="plus"
-                    @click="$refs.new.show()"
-                  >
-                    新增图书
-                  </a-button>
                 </a-button-group>
 
                 <a @click="advanced = !advanced" style="margin-left: 8px">
@@ -56,9 +49,9 @@
               <a-col :md="8" :sm="24">
                 <a-form-item label="学科">
                   <a-select placeholder="选择学科" v-model="queryParam.class">
-                    <a-select-option value="0">a</a-select-option>
-                    <a-select-option value="1">b</a-select-option>
-                    <a-select-option value="2">c</a-select-option>
+                    <a-select-option value="0">自然科学</a-select-option>
+                    <a-select-option value="1">数学</a-select-option>
+                    <a-select-option value="2">文学</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -73,9 +66,9 @@
               <a-col :md="8" :sm="24">
                 <a-form-item label="语言">
                   <a-select placeholder="语言" v-model="queryParam.class">
-                    <a-select-option value="0">a</a-select-option>
-                    <a-select-option value="1">b</a-select-option>
-                    <a-select-option value="2">c</a-select-option>
+                    <a-select-option value="0">汉语</a-select-option>
+                    <a-select-option value="1">英语</a-select-option>
+                    <a-select-option value="2">日语</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -91,6 +84,7 @@
         :loading="loading"
         :pagination="pagination"
         size="small"
+        :scroll="{ x: 1000 }"
       >
         <span slot="creator" slot-scope="creators">
           {{ process(creators) }}
@@ -118,14 +112,9 @@
         </span>
       </a-table>
     </a-card>
-    <view-modal ref="view" />
-    <new-modal ref="new" />
   </page-header-wrapper>
 </template>
 <script>
-import NewModal from "./NewModal";
-import ViewModal from "./ViewModal";
-
 const columns = [
   {
     title: "编号",
@@ -139,7 +128,7 @@ const columns = [
     dataIndex: "creator",
     scopedSlots: { customRender: "creator" },
     ellipsis: true,
-    width: 200,
+    width: 230,
   },
   {
     title: "ISBN",
@@ -149,7 +138,7 @@ const columns = [
   },
   { title: "分类号", dataIndex: "class", width: 60 },
   { title: "出版社", dataIndex: "pub", width: 180, ellipsis: true },
-  { title: "索书号", dataIndex: "call", width: 120 },
+  { title: "索书号", dataIndex: "call", width: 70 },
   {
     title: "操作",
     key: "action",
@@ -157,6 +146,7 @@ const columns = [
   },
 ];
 export default {
+  name: "BookSearch",
   data() {
     return {
       data: [],
@@ -168,11 +158,10 @@ export default {
       },
       queryParam: {},
       columns,
-      filter: {}, //type: string
       advanced: false,
     };
   },
-  components: { NewModal, ViewModal },
+  components: {},
   mounted() {
     this.fetch();
   },
@@ -181,7 +170,22 @@ export default {
     // eslint-disable-next-line no-unused-vars
     fetch(param = {}) {
       this.loading = true;
-      this.$http.get("/books/queryall").then((res) => {
+      let queryString = "";
+
+      if (Object.keys(param) == 0) {
+        queryString = "/books/queryall";
+      } else {
+        queryString = "/books/query?";
+        let type = Number(this.queryParam.type);
+
+        queryString += ["creator", "title", "pub", "isbn", "call"][type];
+        let keyString =
+          type == "3"
+            ? this.queryParam.key.replaceAll("-", "")
+            : this.queryParam.key;
+        queryString += "=" + keyString;
+      }
+      this.$http.get(queryString).then((res) => {
         const pagination = { ...this.pagination };
         pagination.total = res.length;
         this.loading = false;
@@ -197,14 +201,14 @@ export default {
       for (const i in creators.main) {
         if (i > 0) result += ";";
         result += creators.main[i];
-        if (i == creators.main.length - 1) result += " 著";
+        result += " " + creators.method;
       }
       if (creators.addition) {
         for (const i in creators.addition) {
-          if (creators.addition[i].type == "group") continue;
           result += ";";
           result += creators.addition[i].title;
-          if (i == creators.addition.length - 1) result += " 译";
+          if (i == creators.addition.length - 1)
+            result += " " + creators.addition[i].method;
         }
       }
       return result;
