@@ -28,14 +28,14 @@ module.exports = {
         port: 8080,
         proxy: {
             '/api': {
-                target: ENV === "development" ? 'http://localhost:3000' : "http://www.libraryapi.com:3000",
+                target: 'http://localhost:3000',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''
                 }
             },
             '/uploads': {
-                target: ENV === "development" ? 'http://localhost:3000/uploads' : "http://www.libraryapi.com:3000/uploads",
+                target: 'http://localhost:3000/uploads',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/uploads': ''
