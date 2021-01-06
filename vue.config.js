@@ -1,10 +1,12 @@
-const path = require('path'); //引入path模块
+const path = require('path');
+const ENV = process.env.NODE_ENV //引入path模块
 function resolve(dir) {
     return path.join(__dirname, dir) //path.join(__dirname)设置绝对路径
 }
 
 
 module.exports = {
+    publicPath: ENV === "development" ? "" : "/library-admin/",
     css: {
         loaderOptions: {
             // 开启 less-loader

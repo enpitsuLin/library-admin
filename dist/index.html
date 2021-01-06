@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/library-admin/favicon.ico"><title>宁财院图书馆 - NBUFE Library admin</title><style>.first-loading-wrp {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 420px;
+            height: 100%
+        }
+        
+        .first-loading-wrp>h1 {
+            font-size: 98px
+        }
+        
+        .first-loading-wrp .loading-wrp {
+            padding: 98px;
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+        
+        .dot {
+            animation: antRotate 1.2s infinite linear;
+            transform: rotate(45deg);
+            position: relative;
+            display: inline-block;
+            font-size: 32px;
+            width: 32px;
+            height: 32px;
+            box-sizing: border-box
+        }
+        
+        .dot i {
+            width: 14px;
+            height: 14px;
+            position: absolute;
+            display: block;
+            background-color: #1890ff;
+            border-radius: 100%;
+            transform: scale(.75);
+            transform-origin: 50% 50%;
+            opacity: .3;
+            animation: antSpinMove 1s infinite linear alternate
+        }
+        
+        .dot i:nth-child(1) {
+            top: 0;
+            left: 0
+        }
+        
+        .dot i:nth-child(2) {
+            top: 0;
+            right: 0;
+            -webkit-animation-delay: .4s;
+            animation-delay: .4s
+        }
+        
+        .dot i:nth-child(3) {
+            right: 0;
+            bottom: 0;
+            -webkit-animation-delay: .8s;
+            animation-delay: .8s
+        }
+        
+        .dot i:nth-child(4) {
+            bottom: 0;
+            left: 0;
+            -webkit-animation-delay: 1.2s;
+            animation-delay: 1.2s
+        }
+        
+        @keyframes antRotate {
+            to {
+                -webkit-transform: rotate(405deg);
+                transform: rotate(405deg)
+            }
+        }
+        
+        @-webkit-keyframes antRotate {
+            to {
+                -webkit-transform: rotate(405deg);
+                transform: rotate(405deg)
+            }
+        }
+        
+        @keyframes antSpinMove {
+            to {
+                opacity: 1
+            }
+        }
+        
+        @-webkit-keyframes antSpinMove {
+            to {
+                opacity: 1
+            }
+        }</style><link href="/library-admin/css/chunk-0ca4dea9.c948bb19.css" rel="prefetch"><link href="/library-admin/css/chunk-11b8a614.3530108e.css" rel="prefetch"><link href="/library-admin/css/chunk-2f7de92a.85d725ec.css" rel="prefetch"><link href="/library-admin/css/chunk-434f2e35.72aaadb5.css" rel="prefetch"><link href="/library-admin/css/chunk-4751e55f.2a7f21bf.css" rel="prefetch"><link href="/library-admin/css/chunk-5f81faf2.fc1ec48c.css" rel="prefetch"><link href="/library-admin/css/chunk-682e1f64.53129b63.css" rel="prefetch"><link href="/library-admin/css/chunk-697c73c9.7e33a71c.css" rel="prefetch"><link href="/library-admin/css/chunk-e1343782.a1f287c7.css" rel="prefetch"><link href="/library-admin/js/chunk-0ca4dea9.f2275c87.js" rel="prefetch"><link href="/library-admin/js/chunk-11b8a614.ee5bd070.js" rel="prefetch"><link href="/library-admin/js/chunk-2d209ae6.9083ce03.js" rel="prefetch"><link href="/library-admin/js/chunk-2f7de92a.5474f313.js" rel="prefetch"><link href="/library-admin/js/chunk-434f2e35.fc36b9c6.js" rel="prefetch"><link href="/library-admin/js/chunk-4751e55f.51871487.js" rel="prefetch"><link href="/library-admin/js/chunk-5f81faf2.57ac6c0a.js" rel="prefetch"><link href="/library-admin/js/chunk-682e1f64.5eaa565e.js" rel="prefetch"><link href="/library-admin/js/chunk-697c73c9.5f37fbb1.js" rel="prefetch"><link href="/library-admin/js/chunk-e1343782.90f8725f.js" rel="prefetch"><link href="/library-admin/js/fail.6f2c6921.js" rel="prefetch"><link href="/library-admin/js/lang-en-US.8c7cdd0e.js" rel="prefetch"><link href="/library-admin/css/app.72610404.css" rel="preload" as="style"><link href="/library-admin/css/chunk-vendors.dae3c245.css" rel="preload" as="style"><link href="/library-admin/js/app.aa669055.js" rel="preload" as="script"><link href="/library-admin/js/chunk-vendors.9875d76f.js" rel="preload" as="script"><link href="/library-admin/css/chunk-vendors.dae3c245.css" rel="stylesheet"><link href="/library-admin/css/app.72610404.css" rel="stylesheet"></head><body><noscript><strong>We're sorry but 宁财院图书馆 - NBUFE Library admin doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"><div class="first-loading-wrp"><h1>NBUFE</h1><div class="loading-wrp"><span class="dot dot-spin"><i></i><i></i><i></i><i></i></span></div><div style="display: flex; justify-content: center; align-items: center;">Library admin</div></div></div><script src="/library-admin/js/chunk-vendors.9875d76f.js"></script><script src="/library-admin/js/app.aa669055.js"></script></body></html>
