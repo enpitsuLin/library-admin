@@ -8,7 +8,7 @@
               <a-input
                 placeholder="请输入书籍名称"
                 v-decorator="[
-                  'name',
+                  'title',
                   {
                     rules: [
                       {
@@ -62,8 +62,8 @@
         <a-row class="form-row" :gutter="16">
           <a-col :lg="16" :md="24" :sm="24">
             <a-form-item
-              v-for="(k, index) in form.getFieldValue('creators')"
-              :key="k"
+              v-for="index in form.getFieldValue('creators')"
+              :key="index"
               style="margin-bottom: 2px"
               :required="index === 0 ? true : false"
               :label="index === 0 ? '责任者' : ''"
@@ -71,7 +71,7 @@
               <a-input
                 placeholder="责任者名称"
                 v-decorator="[
-                  `creatorName[${k}]`,
+                  `creatorName[${index}]`,
                   {
                     rules: [
                       {
@@ -88,7 +88,10 @@
                 <a-select
                   slot="addonBefore"
                   placeholder="责任者类型"
-                  default-value="mian"
+                  v-decorator="[
+                    `creatorType[${index}]`,
+                    { initialValue: 'mian' },
+                  ]"
                 >
                   <a-select-option value="mian">主要责任者</a-select-option>
                   <a-select-option value="addition">次要责任者</a-select-option>
@@ -96,8 +99,11 @@
                 <a-select
                   slot="addonAfter"
                   placeholder="责任者类型"
-                  default-value="著"
                   style="width: 80px"
+                  v-decorator="[
+                    `creatorMethod[${index}]`,
+                    { initialValue: '著' },
+                  ]"
                 >
                   <a-select-option value="著">著</a-select-option>
                   <a-select-option value="编著">编著</a-select-option>
@@ -124,10 +130,21 @@
           </a-col>
           <a-col :lg="8" :md="24" :sm="24">
             <a-form-item label="语言">
-              <a-select default-value="zh-CN">
+              <a-select v-decorator="['language', { initialValue: 'zh-CN' }]">
                 <a-select-option value="zh-CN">汉语</a-select-option>
                 <a-select-option value="ja-JP">日语</a-select-option>
+                <a-select-option value="en-US">英语</a-select-option>
               </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :lg="12" :md="24" :sm="24">
+            <a-form-item label="分类号">
+              <a-input placeholder="请输入分类号" v-decorator="['class']" />
+            </a-form-item>
+          </a-col>
+          <a-col :lg="12" :md="24" :sm="24">
+            <a-form-item label="索书号">
+              <a-input placeholder="请输入索书号" v-decorator="['call']" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -187,16 +204,13 @@ import FooterToolBar from "@/components/FooterToolbar";
 import { baseMixin } from "@/store/app-mixin";
 
 const fieldLabels = {
-  name: "书名",
+  title: "书名",
   pub: "出版社",
   isbn: "ISBN",
   creatorName: "责任者",
 };
 let id = 0;
-/* const langLabels = {
-  "zh-CN": "汉语",
-  "ja-JP": "日语",
-}; */
+
 export default {
   name: "BookAddForm",
   mixins: [baseMixin],
@@ -228,7 +242,6 @@ export default {
       if (creators.length === 1) {
         return;
       }
-
       form.setFieldsValue({
         creators: creators.filter(
           (key) => key !== creators[creators.length - 1]
@@ -250,60 +263,120 @@ export default {
     validate() {
       const { form, $notification } = this;
       const Form = new Promise((resolve, reject) => {
-        form.validateFields((err, values) => {
+        form.validateFields((err) => {
           if (err) {
-            reject(err);
-            return;
+            let newError = {},
+              no = 0;
+            Object.keys(err)
+              .filter((key) => err[key])
+              .forEach((item) => {
+                if (Array.isArray(err[item])) {
+                  for (let i of err[item]) {
+                    newError[item + `[${no++}]`] = i;
+                  }
+                } else {
+                  newError[item] = err[item];
+                }
+              });
+            if (newError) {
+              reject(newError);
+              return;
+            }
           }
-          resolve(values);
+          resolve();
         });
       }).catch(() => {});
 
       // clean this.errors
       this.errors = [];
-      Promise.all(Form)
-        .then((values) => {
-          $notification["error"]({
-            message: "Received values of form:",
-            description: JSON.stringify(values),
-          });
-        })
-        .catch(() => {
-          const errors = Object.assign({}, this.form.getFieldsError());
-          const tmp = { ...errors };
-          this.errorList(tmp);
+      //Promise.all(Form)
+      Form.then(() => {
+        form.validateFields((err, values) => {
+          if (err) {
+            let newErrors = {},
+              no = 0;
+            const errors = Object.assign({}, this.form.getFieldsError());
+
+            Object.keys(errors)
+              .filter((key) => errors[key])
+              .forEach((item) => {
+                if (item == "creatorMethod" || item == "creatorType") return;
+                if (Array.isArray(errors[item][0])) {
+                  for (let i of errors[item]) {
+                    newErrors[item + `[${no++}]`] = i;
+                  }
+                } else {
+                  newErrors[item] = errors[item];
+                }
+              });
+            if (
+              Object.keys(newErrors)[0] === "creatorName" &&
+              Object.keys(newErrors).length == 1
+            ) {
+              return;
+            }
+            const tmp = { ...newErrors };
+
+            this.errorList(tmp);
+          } else {
+            let {
+              creatorType,
+              creators,
+              creatorName,
+              creatorMethod,
+              ...result
+            } = values;
+
+            result.creator = { main: [], method: "", addition: [] };
+
+            for (let i = 0; i <= values.creatorType.length - 1; i++) {
+              console.log(values.creatorName[i]);
+              if (values.creatorType[i] == "mian") {
+                result.creator.main.push(values.creatorName[i]);
+                result.creator.method = values.creatorMethod[i];
+              } else {
+                result.creator.addition.push({
+                  title: values.creatorName[i],
+                  method: values.creatorMethod[i],
+                });
+              }
+            }
+
+            this.$http.post("/books/add/", result).then((res) => {
+              if (res.msg == "BOOK ADD SUCCESS") {
+                $notification.open({
+                  message: "书籍添加成功",
+                  description: `书籍${result.title}添加成功`,
+                  icon: <a-icon type="smile" style="color: #108ee9" />,
+                });
+              } else {
+                $notification.warning({
+                  message: "书籍添加失败",
+                  description: `书籍${result.title}添加失败,请检查网络连接！`,
+                  icon: <a-icon type="smile" style="color: #108ee9" />,
+                });
+              }
+            });
+          }
         });
+      });
     },
     errorList(errors) {
       if (!errors || errors.length === 0) {
         return;
       }
-      this.errors = [];
-      Object.keys(errors)
+      this.errors = Object.keys(errors)
         .filter((key) => errors[key])
-        .forEach((key) => {
-          let id = 0;
-          if (key == "creatorName") {
-            for (let i of errors[key]) {
-              this.errors.push({
-                key: key + `[${id++}]`,
-                message: i[0],
-                fieldLabel: fieldLabels[key],
-              });
-            }
-          } else {
-            this.errors.push({
-              key: key,
-              message: errors[key][0],
-              fieldLabel: fieldLabels[key],
-            });
-          }
+        .map((key) => {
+          return {
+            key: key,
+            message: errors[key][0],
+            fieldLabel: fieldLabels[key] || fieldLabels.creatorName,
+          };
         });
     },
     scrollToField(fieldKey) {
-      console.log(fieldKey);
       const labelNode = document.getElementById(fieldKey);
-      /* const labelNode = document.querySelector(`label[for="${fieldKey}"]`); */
       if (labelNode) {
         labelNode.scrollIntoView(true);
       }

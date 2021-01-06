@@ -95,7 +95,7 @@
           }}-{{ isbn.substr(8, 4) }}-{{ isbn.substr(12, 1) }}
         </span>
         <span slot="action" slot-scope="record">
-          <a @click="$refs.modal.view(record)">查看</a>
+          <a @click="view(record)">查看</a>
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
@@ -103,18 +103,22 @@
             </a>
             <a-menu slot="overlay">
               <a-menu-item key="0">
-                <a @click="$refs.modal.edit(record)">修改</a>
+                <a @click="edit(record)">修改</a>
               </a-menu-item>
               <a-menu-divider />
-              <a-menu-item key="1"> 删除 </a-menu-item>
+              <a-menu-item key="1">
+                <a @click="del(record)">删除</a>
+              </a-menu-item>
             </a-menu>
           </a-dropdown>
         </span>
       </a-table>
     </a-card>
+    <view-modal ref="viewModal" @refresh="refresh" />
   </page-header-wrapper>
 </template>
 <script>
+import ViewModal from "./ViewModal";
 const columns = [
   {
     title: "编号",
@@ -128,7 +132,7 @@ const columns = [
     dataIndex: "creator",
     scopedSlots: { customRender: "creator" },
     ellipsis: true,
-    width: 230,
+    width: 240,
   },
   {
     title: "ISBN",
@@ -138,11 +142,12 @@ const columns = [
   },
   { title: "分类号", dataIndex: "class", width: 60 },
   { title: "出版社", dataIndex: "pub", width: 180, ellipsis: true },
-  { title: "索书号", dataIndex: "call", width: 70 },
+  { title: "索书号", dataIndex: "call", width: 90 },
   {
     title: "操作",
     key: "action",
-    scopedSlots: { customRender: "action", width: 60, fixed: "right" },
+    width: 110,
+    scopedSlots: { customRender: "action", fixed: "right" },
   },
 ];
 export default {
@@ -161,7 +166,7 @@ export default {
       advanced: false,
     };
   },
-  components: {},
+  components: { ViewModal },
   mounted() {
     this.fetch();
   },
@@ -185,6 +190,7 @@ export default {
             : this.queryParam.key;
         queryString += "=" + keyString;
       }
+      console.log(queryString);
       this.$http.get(queryString).then((res) => {
         const pagination = { ...this.pagination };
         pagination.total = res.length;
@@ -212,6 +218,37 @@ export default {
         }
       }
       return result;
+    },
+    /**
+     * edit
+     */
+    edit(item) {
+      this.$refs.viewModal.edit(item);
+    },
+    view(item) {
+      this.$refs.viewModal.show(item);
+    },
+    del(item) {
+      console.log(item.no);
+      this.$http.post("/books/delete", { no: item.no }).then((res) => {
+        if (res.msg == "BOOK DELETE SUCCESS") {
+          this.$notification.open({
+            message: "书籍删除成功",
+            description: `书籍${item.title}书籍删除成功成功！`,
+            icon: <a-icon type="check" style="color: #10ee99" />,
+          });
+        } else {
+          this.$notification.warning({
+            message: "书籍书籍删除成功失败",
+            description: `书籍${item.title}书籍删除成功失败,请检查网络连接！`,
+            icon: <a-icon type="exclamation" style="color: #ee1111" />,
+          });
+        }
+      });
+      this.refresh();
+    },
+    refresh() {
+      this.fetch();
     },
   },
 };

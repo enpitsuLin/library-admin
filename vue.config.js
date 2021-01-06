@@ -39,6 +39,12 @@ module.exports = {
                     '^/uploads': ''
                 }
             }
-        }
+        },
+        overlay: {
+            warnings: false,
+            errors: false
+        },
+
     },
+    lintOnSave: false
 }

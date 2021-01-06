@@ -34,7 +34,7 @@
             <a slot="title">{{ user.name }}</a>
           </a-list-item-meta>
           <div slot="actions">
-            <a @click="edit(user)">编辑</a>
+            <a @click="view(user)">查看</a>
             <a-divider type="vertical" />
             <a-popconfirm
               title="确认删除该用户？"
@@ -106,7 +106,7 @@ export default {
     getAvatar(avatar) {
       return "/uploads/avatar/" + avatar;
     },
-    edit(user) {
+    view(user) {
       console.log(user);
     },
     del(user) {

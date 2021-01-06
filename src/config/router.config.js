@@ -46,6 +46,7 @@ export const asyncRouterMap = [{
                 path: '/management',
                 name: 'management',
                 component: RouteView,
+                redirect: '/managerment/book',
                 meta: { title: 'menu.management', keepAlive: true, icon: 'table' },
                 children: [{
                         path: '/managerment/book',
