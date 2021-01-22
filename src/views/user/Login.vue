@@ -14,7 +14,13 @@
       >
         <a-tab-pane key="tab1" tab="账号密码登录">
           <!-- 错误提示 -->
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px" message="账户或密码错误" />
+          <a-alert
+            v-if="isLoginError"
+            type="error"
+            showIcon
+            style="margin-bottom: 24px"
+            message="账户或密码错误"
+          />
 
           <a-form-item>
             <a-input
@@ -54,6 +60,15 @@
                 :style="{ color: 'rgba(0,0,0,.25)' }"
               ></a-icon>
             </a-input-password>
+          </a-form-item>
+          <a-form-item>
+            <a-select
+              size="large"
+              v-decorator="['role', { initialValue: 'user' }]"
+            >
+              <a-select-option value="user">用户</a-select-option>
+              <a-select-option value="admin">管理员</a-select-option>
+            </a-select>
           </a-form-item>
         </a-tab-pane>
         <a-tab-pane key="tab2" tab="手机号登录">

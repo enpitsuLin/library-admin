@@ -1,4 +1,4 @@
-import { UserLayout, DashboardLayout } from '@/layouts'
+import { UserLayout, BasicLayout } from '@/layouts'
 
 
 const RouteView = {
@@ -8,8 +8,8 @@ const RouteView = {
 export const asyncRouterMap = [{
         path: '/',
         name: 'index',
-        component: DashboardLayout,
-        meta: { title: 'menu.home' },
+        component: BasicLayout,
+        meta: { title: 'menu.home', permission: 'user' },
         redirect: '/dashboard/workplace',
         children: [
             // dashboard
@@ -18,13 +18,13 @@ export const asyncRouterMap = [{
                 name: 'dashboard',
                 redirect: '/dashboard/workplace',
                 component: RouteView,
-                meta: { title: 'menu.dashboard', keepAlive: true, icon: 'desktop' },
+                meta: { title: 'menu.dashboard', keepAlive: true, icon: 'desktop', permission: 'user' },
                 children: [{
                         path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
                         name: 'Analysis',
                         component: () =>
                             import ('@/views/dashboard/Analysis'),
-                        meta: { title: 'menu.dashboard.analysis', keepAlive: false }
+                        meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: 'user' }
                     },
                     // 外部链接
                     {
@@ -37,7 +37,7 @@ export const asyncRouterMap = [{
                         name: 'Workplace',
                         component: () =>
                             import ('@/views/dashboard/Workplace'),
-                        meta: { title: 'menu.dashboard.workplace', keepAlive: true }
+                        meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: 'user' }
                     }
                 ]
             },
@@ -46,41 +46,60 @@ export const asyncRouterMap = [{
                 path: '/management',
                 name: 'management',
                 component: RouteView,
-                redirect: '/managerment/book',
-                meta: { title: 'menu.management', keepAlive: true, icon: 'table' },
-                children: [{
-                        path: '/managerment/book',
+                redirect: '/management/book',
+                meta: { title: 'menu.management', keepAlive: true, icon: 'table', permission: 'user' },
+                children: [
+                    //管理藏书
+                    {
+                        path: '/management/book',
                         name: 'Book',
                         component: RouteView,
-                        redirect: '/managerment/book/manage',
-                        meta: { title: 'menu.management.book', keepAlive: true },
+                        redirect: '/management/book/manage',
+                        meta: { title: 'menu.management.book', keepAlive: true, permission: 'user' },
                         children: [{
-                            path: '/managerment/book/manage',
+                            path: '/management/book/manage',
                             name: 'BookManage',
                             component: () =>
                                 import ('@/views/management/books/index'),
-                            meta: { title: 'menu.management.book.manage', keepAlive: true },
+                            meta: { title: 'menu.management.book.manage', keepAlive: true, permission: 'user' },
                         }, {
-                            path: '/managerment/book/add',
+                            path: '/management/book/add',
                             name: 'BookAdd',
                             component: () =>
                                 import ('@/views/management/books/AddBook'),
-                            meta: { title: 'menu.management.book.add', keepAlive: true },
+                            meta: { title: 'menu.management.book.add', keepAlive: true, permission: 'user' },
                         }, ]
-                    }, {
-                        path: '/managerment/user',
+                    },
+                    //管理用户
+                    {
+                        path: '/management/user',
                         name: 'User',
                         component: RouteView,
-                        redirect: '/managerment/user/manage',
-                        meta: { title: 'menu.management.user', keepAlive: true },
+                        redirect: '/management/user/manage',
+                        meta: { title: 'menu.management.user', keepAlive: true, permission: 'user' },
                         children: [{
-                            path: '/managerment/user/manage',
+                            path: '/management/user/manage',
                             name: 'UserManage',
                             component: () =>
                                 import ('@/views/management/users/index'),
-                            meta: { title: 'menu.management.user.manage', keepAlive: true },
+                            meta: { title: 'menu.management.user.manage', keepAlive: true, permission: 'user' },
                         }]
                     },
+                    //管理图书管理员
+                    {
+                        path: '/management/admin',
+                        name: 'Admin',
+                        component: RouteView,
+                        redirect: '/management/admin/manage',
+                        meta: { title: 'menu.management.admin', keepAlive: true, permission: 'super' },
+                        children: [{
+                            path: '/management/admin/manage',
+                            name: 'AdminManage',
+                            component: () =>
+                                import ('@/views/management/admins/index'),
+                            meta: { title: 'menu.management.admin.manage', keepAlive: true, permission: 'super' },
+                        }]
+                    }
 
                 ]
             },
@@ -90,7 +109,7 @@ export const asyncRouterMap = [{
                 component: RouteView,
                 redirect: '/account/center',
                 name: 'account',
-                meta: { title: 'menu.account', icon: 'user', keepAlive: true },
+                meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: 'user' },
                 children: [
                     /* {
                         path: '/account/center',
@@ -104,7 +123,7 @@ export const asyncRouterMap = [{
                         name: 'settings',
                         component: () =>
                             import ('@/views/account/settings/Index'),
-                        meta: { title: 'menu.account.profile', hideHeader: true },
+                        meta: { title: 'menu.account.profile', hideHeader: true, permission: 'user' },
                         redirect: '/account/settings/base',
                         hideChildrenInMenu: true,
                         children: [{
@@ -112,7 +131,7 @@ export const asyncRouterMap = [{
                                 name: 'BaseSettings',
                                 component: () =>
                                     import ('@/views/account/settings/BaseSetting'),
-                                meta: { title: 'menu.account.profile.base', hidden: true, keepAlive: true }
+                                meta: { title: 'menu.account.profile.base', hidden: true, keepAlive: true, permission: 'user' }
                             },
 
                             {
@@ -120,7 +139,7 @@ export const asyncRouterMap = [{
                                 name: 'SecuritySettings',
                                 component: () =>
                                     import ('@/views/account/settings/Security'),
-                                meta: { title: 'menu.account.profile.security', hidden: true, keepAlive: true }
+                                meta: { title: 'menu.account.profile.security', hidden: true, keepAlive: true, permission: 'user' }
                             },
                             /*
                                 {

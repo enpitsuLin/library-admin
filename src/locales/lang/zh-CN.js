@@ -21,6 +21,8 @@ const locale = {
     'menu.management.book.add': '新增藏书',
     'menu.management.user': '用户管理',
     'menu.management.user.manage': '检索用户',
+    'menu.management.admin': '图书管理员',
+    'menu.management.admin.manage': '管理',
     'menu.account': '个人页',
     'menu.account.profile': '个人设置',
     'menu.account.profile.base': '基础设置',

@@ -1,5 +1,5 @@
 import UserLayout from './UserLayout'
-import DashboardLayout from './DashboardLayout'
+import BasicLayout from './BasicLayout'
 import RouteView from './RouteView'
 
-export { UserLayout, DashboardLayout, RouteView }
+export { UserLayout, BasicLayout, RouteView }

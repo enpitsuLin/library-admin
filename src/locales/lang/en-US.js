@@ -21,6 +21,8 @@ const locale = {
     'menu.management.book.add': 'Add',
     'menu.management.user': 'Users',
     'menu.management.user.manage': 'Search',
+    'menu.management.admin': 'Admin',
+    'menu.management.admin.manage': 'Management',
     'menu.account': 'Account',
     'menu.account.profile': 'Profile',
     'menu.account.profile.base': 'Base Setting',

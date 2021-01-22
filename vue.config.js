@@ -6,7 +6,7 @@ function resolve(dir) {
 
 
 module.exports = {
-    publicPath: ENV === "development" ? "" : "/library-admin/",
+
     css: {
         loaderOptions: {
             // 开启 less-loader

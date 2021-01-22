@@ -15,6 +15,21 @@
         <h1>宁财院图书馆</h1>
       </div>
     </template>
+    <template v-slot:headerContentRender>
+      <div>
+        <a-tooltip title="刷新页面">
+          <a-icon
+            type="reload"
+            style="font-size: 18px; cursor: pointer"
+            @click="
+              () => {
+                $message.info('只是一个DEMO');
+              }
+            "
+          />
+        </a-tooltip>
+      </div>
+    </template>
     <template v-slot:rightContentRender
       ><right-content
         :top-menu="settings.layout === 'topmenu'"
@@ -67,7 +82,7 @@ import RightContent from "@/components/Header/RightContent";
 import defaultSettings from "@/config/defaultSettings";
 
 export default {
-  name: "DashboardLayout",
+  name: "BasicLayout",
   components: { ProLayout, SettingDrawer, RightContent, GlobalFooter },
   data() {
     return {
@@ -179,5 +194,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "./DashboardLayout.less";
+@import "./BasicLayout.less";
 </style>
