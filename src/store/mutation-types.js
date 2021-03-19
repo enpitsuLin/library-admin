@@ -2,6 +2,7 @@ export const ACCESS_TOKEN = 'Access-Token'
 
 export const SIDEBAR_TYPE = 'sidebar_type'
 export const TOGGLE_MOBILE_TYPE = 'is_mobile'
+export const TOGGLE_ADMIN = 'is_admin'
 export const TOGGLE_NAV_THEME = 'nav_theme'
 export const TOGGLE_LAYOUT = 'layout'
 export const TOGGLE_FIXED_HEADER = 'fixed_header'

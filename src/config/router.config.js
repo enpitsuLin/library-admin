@@ -47,7 +47,7 @@ export const asyncRouterMap = [{
                 name: 'management',
                 component: RouteView,
                 redirect: '/management/book',
-                meta: { title: 'menu.management', keepAlive: true, icon: 'table', permission: 'user' },
+                meta: { title: 'menu.management', keepAlive: false, icon: 'table', permission: 'admin' },
                 children: [
                     //管理藏书
                     {
@@ -55,19 +55,19 @@ export const asyncRouterMap = [{
                         name: 'Book',
                         component: RouteView,
                         redirect: '/management/book/manage',
-                        meta: { title: 'menu.management.book', keepAlive: true, permission: 'user' },
+                        meta: { title: 'menu.management.book', keepAlive: true },
                         children: [{
                             path: '/management/book/manage',
                             name: 'BookManage',
                             component: () =>
                                 import ('@/views/management/books/index'),
-                            meta: { title: 'menu.management.book.manage', keepAlive: true, permission: 'user' },
+                            meta: { title: 'menu.management.book.manage', keepAlive: true },
                         }, {
                             path: '/management/book/add',
                             name: 'BookAdd',
                             component: () =>
                                 import ('@/views/management/books/AddBook'),
-                            meta: { title: 'menu.management.book.add', keepAlive: true, permission: 'user' },
+                            meta: { title: 'menu.management.book.add', keepAlive: true },
                         }, ]
                     },
                     //管理用户
@@ -76,13 +76,13 @@ export const asyncRouterMap = [{
                         name: 'User',
                         component: RouteView,
                         redirect: '/management/user/manage',
-                        meta: { title: 'menu.management.user', keepAlive: true, permission: 'user' },
+                        meta: { title: 'menu.management.user', keepAlive: true },
                         children: [{
                             path: '/management/user/manage',
                             name: 'UserManage',
                             component: () =>
                                 import ('@/views/management/users/index'),
-                            meta: { title: 'menu.management.user.manage', keepAlive: true, permission: 'user' },
+                            meta: { title: 'menu.management.user.manage', keepAlive: true },
                         }]
                     },
                     //管理图书管理员
@@ -187,11 +187,30 @@ export const constantRouterMap = [{
         redirect: '/user/login',
         hidden: true,
         children: [{
-            path: 'login',
-            name: 'login',
-            component: () =>
-                import ('@/views/user/Login')
-        }]
+                path: 'login',
+                name: 'login',
+                component: () =>
+                    import ('@/views/user/Login')
+            },
+            {
+                path: 'register',
+                name: 'register',
+                component: () =>
+                    import ( /* webpackChunkName: "user" */ '@/views/user/Register')
+            },
+            {
+                path: 'register-result',
+                name: 'registerResult',
+                component: () =>
+                    import ( /* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+            },
+            {
+                path: 'recover',
+                name: 'recover',
+                component: undefined
+            }
+        ]
+
     },
 
     {

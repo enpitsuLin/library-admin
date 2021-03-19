@@ -2,6 +2,7 @@ import storage from 'store'
 import {
     SIDEBAR_TYPE,
     TOGGLE_MOBILE_TYPE,
+    TOGGLE_ADMIN,
     TOGGLE_NAV_THEME,
     TOGGLE_LAYOUT,
     TOGGLE_FIXED_HEADER,
@@ -20,6 +21,7 @@ const app = {
     state: {
         sideCollapsed: false,
         isMobile: false,
+        isAdmin: false,
         theme: 'dark',
         layout: '',
         contentWidth: '',
@@ -39,6 +41,9 @@ const app = {
         },
         [TOGGLE_MOBILE_TYPE]: (state, isMobile) => {
             state.isMobile = isMobile
+        },
+        [TOGGLE_ADMIN]: (state, isAdmin) => {
+            state.isAdmin = isAdmin
         },
         [TOGGLE_NAV_THEME]: (state, theme) => {
             state.theme = theme
@@ -92,6 +97,9 @@ const app = {
                     reject(e)
                 })
             })
+        },
+        setAdmin({ commit }, isAdmin) {
+            commit(TOGGLE_ADMIN, isAdmin)
         }
     }
 }

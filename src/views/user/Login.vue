@@ -19,18 +19,18 @@
             type="error"
             showIcon
             style="margin-bottom: 24px"
-            message="账户或密码错误"
+            message="用户名或密码错误"
           />
 
           <a-form-item>
             <a-input
               type="text"
               size="large"
-              placeholder="账户名"
+              placeholder="用户名"
               v-decorator="[
                 'username',
                 {
-                  rules: [{ required: true, message: '请输入帐户名' }],
+                  rules: [{ required: true, message: '请输入用户名' }],
                   validateTrigger: 'change',
                 },
               ]"
@@ -61,17 +61,8 @@
               ></a-icon>
             </a-input-password>
           </a-form-item>
-          <a-form-item>
-            <a-select
-              size="large"
-              v-decorator="['role', { initialValue: 'user' }]"
-            >
-              <a-select-option value="user">用户</a-select-option>
-              <a-select-option value="admin">管理员</a-select-option>
-            </a-select>
-          </a-form-item>
         </a-tab-pane>
-        <a-tab-pane key="tab2" tab="手机号登录">
+        <a-tab-pane key="tab2" tab="管理员登录">
           <a-form-item>
             <a-input
               size="large"
@@ -156,11 +147,27 @@
           >确定</a-button
         >
       </a-form-item>
+      <div class="user-login-other">
+        <span>其他登录方式</span>
+        <a>
+          <a-icon class="item-icon" type="alipay-circle"></a-icon>
+        </a>
+        <a>
+          <a-icon class="item-icon" type="taobao-circle"></a-icon>
+        </a>
+        <a>
+          <a-icon class="item-icon" type="weibo-circle"></a-icon>
+        </a>
+        <router-link class="register" :to="{ name: 'register' }"
+          >注册账户</router-link
+        >
+      </div>
     </a-form>
   </div>
 </template>
 
 <script>
+import md5 from 'md5'
 import { mapActions } from "vuex";
 import { timeFix } from "@/utils/util";
 
@@ -214,7 +221,7 @@ export default {
             };
             delete loginParams.username;
             loginParams["username"] = values.username;
-            loginParams.password = values.password; //md5(values.password);
+            loginParams.password = md5(values.password);
             Login(loginParams)
               .then((res) => this.loginSuccess(res))
               .catch((err) => this.requestFailed(err))
@@ -263,13 +270,14 @@ export default {
     font-size: 14px;
   }
 
-  .ant-checkbox-wrapper {
-    float: left;
+  .getCaptcha {
+    display: block;
+    width: 100%;
+    height: 40px;
   }
 
   .forge-password {
     font-size: 14px;
-    float: right;
   }
 
   button.login-button {
@@ -277,6 +285,29 @@ export default {
     font-size: 16px;
     height: 40px;
     width: 100%;
+  }
+
+  .user-login-other {
+    text-align: left;
+    margin-top: 24px;
+    line-height: 22px;
+
+    .item-icon {
+      font-size: 24px;
+      color: rgba(0, 0, 0, 0.2);
+      margin-left: 16px;
+      vertical-align: middle;
+      cursor: pointer;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #1890ff;
+      }
+    }
+
+    .register {
+      float: right;
+    }
   }
 }
 </style>

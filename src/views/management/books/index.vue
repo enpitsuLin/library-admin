@@ -190,7 +190,6 @@ export default {
             : this.queryParam.key;
         queryString += "=" + keyString;
       }
-      console.log(queryString);
       this.$http.get(queryString).then((res) => {
         const pagination = { ...this.pagination };
         pagination.total = res.length;
@@ -229,7 +228,6 @@ export default {
       this.$refs.viewModal.show(item);
     },
     del(item) {
-      console.log(item.no);
       this.$http.post("/books/delete", { no: item.no }).then((res) => {
         if (res.msg == "BOOK DELETE SUCCESS") {
           this.$notification.open({

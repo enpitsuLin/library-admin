@@ -91,7 +91,6 @@ export default {
       e.preventDefault();
       this.loading = true;
       this.form.validateFields((error, values) => {
-        console.log(values);
         if (!error) {
           const data = values;
           this.$http.post("/admin/updateinfo", data).then((response) => {

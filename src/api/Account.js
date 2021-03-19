@@ -1,13 +1,16 @@
 import request from '@/utils/request'
 
 const userApi = {
-    Login: '/admin/login',
+    //User account
+    Login: '/users/login',
+    UserInfo: '/users/info',
+    Register: '/users/register',
+    UploadAvatar: '/users/uploadavatar',
+
     Logout: '/admin/logout',
-    UserInfo: '/admin/info',
-    UploadAvatar: '/admin/uploadavatar'
 }
 
-
+// 用户的接口
 export function login(parameter) {
     return request({
         url: userApi.Login,
@@ -34,12 +37,15 @@ export function logout() {
         }
     })
 }
-export function uploadAvatar() {
+export function uploadAvatar(parameter) {
     return request({
         url: userApi.UploadAvatar,
         method: 'post',
+        contentType: false,
+        processData: false,
+        data: parameter,
         headers: {
             "Content-Type": "multipart/form-data",
-        }
+        },
     })
 }

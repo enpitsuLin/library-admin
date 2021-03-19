@@ -16,7 +16,7 @@
       </div>
     </template>
     <template v-slot:headerContentRender>
-      <div>
+      <div class="ant-pro-global-header-trigger">
         <a-tooltip title="刷新页面">
           <a-icon
             type="reload"

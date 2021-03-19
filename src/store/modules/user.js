@@ -1,5 +1,5 @@
 import storage from 'store'
-import { login, getInfo, logout } from '@/api/login'
+import { login, getInfo, logout } from '@/api/Account'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
@@ -9,7 +9,7 @@ const user = {
         name: '',
         welcome: '',
         avatar: '',
-        roles: [],
+        roles: {},
         info: {}
     },
 
@@ -42,6 +42,7 @@ const user = {
                     commit('SET_TOKEN', result.token)
                     resolve()
                 }).catch(error => {
+
                     reject(error)
                 })
             })
@@ -53,11 +54,11 @@ const user = {
                 getInfo().then(response => {
                     const result = response.result
                     if (result.role) {
-                        commit('SET_ROLES', result.role)
-                        commit('SET_INFO', result)
+                        commit('SET_ROLES', JSON.parse(result.role))
                     } else {
-                        reject(new Error('getInfo: roles must be a non-null array !'))
+                        commit('SET_ROLES', { id: "user", name: "用户", permission: "user" })
                     }
+                    commit('SET_INFO', result)
                     commit('SET_NAME', { name: result.name, welcome: welcome() })
                     commit('SET_AVATAR', result.avatar)
                     resolve(response)
@@ -72,8 +73,11 @@ const user = {
             return new Promise((resolve) => {
                 logout(state.token).then(() => {
                     commit('SET_TOKEN', '')
-                    commit('SET_ROLES', [])
+                    commit('SET_ROLES', {})
+                    commit('SET_INFO', {})
                     storage.remove(ACCESS_TOKEN)
+                    dispatch('permission/GenerateRoutes', {}, { root: true })
+
                     resolve()
                 }).catch(() => {
                     resolve()

@@ -13,7 +13,7 @@ function hasPermission(permission, route) {
             return true
         else if (permission == 'admin' && route.meta.permission != 'super')
             return true
-        else if (permission == 'admin' && route.meta.permission == 'user')
+        else if (permission == 'user' && route.meta.permission == 'user')
             return true
         else
             return false
@@ -56,6 +56,10 @@ const permission = {
         addRouters: []
     },
     mutations: {
+        SLEAR_ROUTERS: (state) => {
+            state.routers = constantRouterMap;
+            state.addRouters = []
+        },
         SET_ROUTERS: (state, routers) => {
             state.addRouters = routers
             state.routers = constantRouterMap.concat(routers)
@@ -64,8 +68,10 @@ const permission = {
     actions: {
         GenerateRoutes({ commit }, data) {
             return new Promise(resolve => {
+                commit('SLEAR_ROUTERS')
                 const { roles } = data
                 const accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+                console.log(accessedRouters);
                 commit('SET_ROUTERS', accessedRouters)
                 resolve()
             })

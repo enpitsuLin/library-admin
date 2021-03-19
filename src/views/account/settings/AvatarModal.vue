@@ -56,6 +56,7 @@
   </a-modal>
 </template>
 <script>
+import { UploadAvatar, UploadAvatarAdmin } from "@/api/Account";
 export default {
   data() {
     return {
@@ -125,7 +126,7 @@ export default {
 
           formData.append("file", data, this.fileName);
           this.$http
-            .post("/admin/uploadavatar", formData, {
+            .post("/users/uploadavatar", formData, {
               contentType: false,
               processData: false,
               headers: {
@@ -134,7 +135,6 @@ export default {
             })
             .then((response) => {
               let res = response.result;
-              //console.log("upload response:", res);
               if (res.status === "done") {
                 _this.$message.success("上传成功");
                 _this.$emit("ok", res.url);

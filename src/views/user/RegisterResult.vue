@@ -7,7 +7,7 @@
 
     <template #extra>
       <a-button size="large" type="primary">查看邮箱</a-button>
-      <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回首页</a-button>
+      <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回登陆</a-button>
     </template>
 
   </a-result>

@@ -10,7 +10,7 @@
             {{ timeFix }}，{{ user.name
             }}<span class="welcome-text">，{{ welcome }}</span>
           </div>
-          <div>系统管理员 | 数字工程与技术学院</div>
+          <div>{{ roles.name }} | 数字工程与技术学院</div>
         </div>
       </div>
     </template>
@@ -101,6 +101,7 @@ export default {
       nickname: (state) => state.user.nickname,
       welcome: (state) => state.user.welcome,
       avatarsrc: (state) => state.user.avatar,
+      roles: (state) => state.user.roles,
     }),
     currentUser() {
       return {
@@ -111,6 +112,7 @@ export default {
     userInfo() {
       return this.$store.getters.userInfo;
     },
+
   },
 };
 </script>
