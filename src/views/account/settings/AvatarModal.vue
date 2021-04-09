@@ -33,7 +33,7 @@
     <a-row>
       <a-col :xs="8" :md="6">
         <a-upload
-          name="file"
+          name="avatar"
           :beforeUpload="beforeUpload"
           :showUploadList="false"
         >
@@ -49,14 +49,13 @@
           <a-button icon="redo" @click="rotateRight" />
         </a-button-group>
       </a-col>
-      <a-col :xs="4" :md="{ span: '2', offset: '10' }"
-        ><a-button type="primary" @click="finish('blob')">保存</a-button></a-col
-      >
+      <a-col :xs="4" :md="{ span: '2', offset: '10' }">
+        <a-button type="primary" @click="finish('blob')">保存</a-button>
+      </a-col>
     </a-row>
   </a-modal>
 </template>
 <script>
-import { UploadAvatar, UploadAvatarAdmin } from "@/api/Account";
 export default {
   data() {
     return {
@@ -80,7 +79,6 @@ export default {
     edit(id) {
       this.visible = true;
       this.id = id;
-      /* 获取原始头像 */
     },
     close() {
       this.id = null;
@@ -101,15 +99,10 @@ export default {
     },
     beforeUpload(file) {
       const reader = new FileReader();
-      // 把Array Buffer转化为blob 如果是base64不需要
-      // 转化为base64
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.options.img = reader.result;
       };
-      // 转化为blob
-      // reader.readAsArrayBuffer(file)
-
       return false;
     },
 
@@ -124,20 +117,19 @@ export default {
           this.model = true;
           this.modelSrc = img;
 
-          formData.append("file", data, this.fileName);
+          formData.append("avatar", data, this.fileName);
           this.$http
-            .post("/users/uploadavatar", formData, {
+            .post("/uploads/avatar", formData, {
               contentType: false,
               processData: false,
               headers: {
                 "Content-Type": "multipart/form-data",
               },
             })
-            .then((response) => {
-              let res = response.result;
-              if (res.status === "done") {
+            .then((res) => {
+              if (res.code === 200) {
                 _this.$message.success("上传成功");
-                _this.$emit("ok", res.url);
+                _this.$emit("ok", res.data.filename);
                 _this.visible = false;
                 _this.options.img = "";
               }

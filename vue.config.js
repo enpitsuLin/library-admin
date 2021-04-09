@@ -6,7 +6,6 @@ function resolve(dir) {
 
 
 module.exports = {
-
     css: {
         loaderOptions: {
             // 开启 less-loader
@@ -20,7 +19,7 @@ module.exports = {
             .set('@', resolve('./src'))
         config.plugin('html')
             .tap(args => {
-                args[0].title = "宁财院图书馆 - NBUFE Library admin";
+                args[0].title = "宁财院图书馆 - NBUFE Library";
                 return args;
             })
     },

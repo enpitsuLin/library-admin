@@ -1,24 +1,20 @@
 <template>
   <div :class="wrpCls">
-    <avatar-dropdown
+    <user-dropdown
       :menu="showMenu"
       :current-user="currentUser"
       :class="prefixCls"
     />
-    <select-lang :class="prefixCls" />
   </div>
 </template>
 
 <script>
-import AvatarDropdown from "./AvatarDropdown";
-import SelectLang from "@/components/SelectLang/SelectLang";
-import { mapState } from "vuex";
-
+import UserDropdown from "./UserDropdown";
+import { mapGetters } from "vuex";
 export default {
   name: "RightContent",
   components: {
-    AvatarDropdown,
-    SelectLang,
+    UserDropdown,
   },
   props: {
     prefixCls: {
@@ -41,19 +37,9 @@ export default {
   data() {
     return {
       showMenu: true,
-      //currentUser: {},
     };
   },
   computed: {
-    ...mapState({
-      avatarsrc: (state) => state.user.avatar,
-    }),
-    currentUser() {
-      return {
-        name: this.userInfo.name,
-        avatar: "/uploads/avatar/" + this.avatarsrc,
-      };
-    },
     wrpCls() {
       return {
         "ant-pro-global-header-index-right": true,
@@ -62,8 +48,9 @@ export default {
         }`]: true,
       };
     },
-    userInfo() {
-      return this.$store.getters.userInfo;
+    ...mapGetters(["isLogin", "CurrentUser"]),
+    currentUser() {
+      return this.CurrentUser;
     },
   },
 };

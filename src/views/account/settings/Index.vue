@@ -16,13 +16,13 @@
           >
             <a-menu-item key="/account/settings/base">
               <router-link :to="{ name: 'BaseSettings' }">
-                <span>{{ i18nRender("menu.account.profile.base") }}</span>
+                <span>基础设置</span>
               </router-link>
             </a-menu-item>
 
             <a-menu-item key="/account/settings/security">
               <router-link :to="{ name: 'SecuritySettings' }">
-                <span>{{ i18nRender("menu.account.profile.security") }}</span>
+                <span>安全设置</span>
               </router-link>
             </a-menu-item>
 
@@ -47,7 +47,7 @@
         </div>
         <div class="account-settings-info-right">
           <div class="account-settings-info-title">
-            <span>{{ i18nRender($route.meta.title) }}</span>
+            <span>{{ $route.meta.title }}</span>
           </div>
           <route-view></route-view>
         </div>
@@ -59,7 +59,6 @@
 <script>
 import { RouteView } from "@/layouts";
 import { baseMixin } from "@/store/app-mixin";
-import { i18nRender } from "@/locales";
 
 export default {
   components: {
@@ -99,7 +98,6 @@ export default {
     this.updateMenu();
   },
   methods: {
-    i18nRender,
     onOpenChange(openKeys) {
       this.openKeys = openKeys;
     },
@@ -132,7 +130,7 @@ export default {
       border-bottom: 1px solid #e8e8e8;
       width: 100%;
       height: 50px;
-      overflow-x: auto;
+      overflow-x: hidden;
       overflow-y: scroll;
     }
     .account-settings-info-right {

@@ -1,312 +1,176 @@
 <template>
-  <div class="main">
-    <a-form
-      id="formLogin"
-      class="user-layout-login"
-      ref="formLogin"
-      :form="form"
-      @submit="handleSubmit"
-    >
-      <a-tabs
-        :activeKey="customActiveKey"
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-        @change="handleTabClick"
-      >
-        <a-tab-pane key="tab1" tab="账号密码登录">
-          <!-- 错误提示 -->
-          <a-alert
-            v-if="isLoginError"
-            type="error"
-            showIcon
-            style="margin-bottom: 24px"
-            message="用户名或密码错误"
-          />
-
-          <a-form-item>
-            <a-input
-              type="text"
-              size="large"
-              placeholder="用户名"
-              v-decorator="[
-                'username',
-                {
-                  rules: [{ required: true, message: '请输入用户名' }],
-                  validateTrigger: 'change',
-                },
-              ]"
+  <div class="login-content">
+    <div class="login-content-title">
+      <div class="main-title" data-v-24ee61b5="">图书馆账号登录</div>
+    </div>
+    <div class="login-content-main">
+      <a-row type="flex" justify="space-between" :gutter="0">
+        <a-col :xs="{ span: 0 }" :md="{ span: 11 }">
+          <div class="qcode-wrap">
+            <div class="qcode-img">
+              <img src="" alt="" />
+            </div>
+            <div class="qcode-footer">
+              <span> 请使用微信扫描二维码登录 </span>
+            </div>
+          </div>
+        </a-col>
+        <a-col :xs="{ span: 0 }" :sm="{ span: 1 }">
+          <a-divider type="vertical" class="divider" />
+        </a-col>
+        <a-col :xs="{ span: 24 }" :md="{ span: 11 }">
+          <div class="login-form-wrap">
+            <a-form-model
+              ref="loginForm"
+              class="login-form"
+              :model="form"
+              :rules="rules"
             >
-              <a-icon
-                slot="prefix"
-                type="user"
-                :style="{ color: 'rgba(0,0,0,.25)' }"
-              ></a-icon>
-            </a-input>
-          </a-form-item>
-          <a-form-item>
-            <a-input-password
-              size="large"
-              placeholder="密码"
-              v-decorator="[
-                'password',
-                {
-                  rules: [{ required: true, message: '请输入密码' }],
-                  validateTrigger: 'blur',
-                },
-              ]"
-            >
-              <a-icon
-                slot="prefix"
-                type="lock"
-                :style="{ color: 'rgba(0,0,0,.25)' }"
-              ></a-icon>
-            </a-input-password>
-          </a-form-item>
-        </a-tab-pane>
-        <a-tab-pane key="tab2" tab="管理员登录">
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="手机号"
-              v-decorator="[
-                'mobile',
-                {
-                  rules: [
-                    {
-                      required: true,
-                      pattern: /^1[34578]\d{9}$/,
-                      message: '请输入正确的手机号',
-                    },
-                  ],
-                  validateTrigger: 'change',
-                },
-              ]"
-            >
-              <a-icon
-                slot="prefix"
-                type="mobile"
-                :style="{ color: 'rgba(0,0,0,.25)' }"
-              />
-            </a-input>
-          </a-form-item>
-
-          <a-row :gutter="16">
-            <a-col class="gutter-row" :span="16">
-              <a-form-item>
-                <a-input
-                  size="large"
-                  type="text"
-                  placeholder="验证码"
-                  v-decorator="[
-                    'captcha',
-                    {
-                      rules: [{ required: true, message: '请输入验证码' }],
-                      validateTrigger: 'blur',
-                    },
-                  ]"
+              <a-form-model-item prop="username">
+                <a-input v-model="form.username" />
+              </a-form-model-item>
+              <a-form-model-item prop="password">
+                <a-input-password v-model="form.password" type="password" />
+              </a-form-model-item>
+              <a-form-model-item>
+                <a-button
+                  type="primary"
+                  @click="onLoginClick()"
+                  class="login-form-button"
+                  :loading="loginBtnLoading"
                 >
-                  <a-icon
-                    slot="prefix"
-                    type="mail"
-                    :style="{ color: 'rgba(0,0,0,.25)' }"
-                  />
-                </a-input>
-              </a-form-item>
-            </a-col>
-            <a-col class="gutter-row" :span="8">
-              <a-button
-                class="getCaptcha"
-                tabindex="-1"
-                :disabled="state.smsSendBtn"
-                @click.stop.prevent="getCaptcha"
-                v-text="
-                  (!state.smsSendBtn && '获取验证码') || state.time + ' s'
-                "
-              ></a-button>
-            </a-col>
-          </a-row>
-        </a-tab-pane>
-      </a-tabs>
-      <a-form-item>
-        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]"
-          >自动登录</a-checkbox
-        >
-        <label class="forge-password">
-          <a href="#">忘记密码</a>
-        </label>
-      </a-form-item>
-
-      <a-form-item style="margin-top: 24px">
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="login-button"
-          :loading="state.loginBtn"
-          :disabled="state.loginBtn"
-          >确定</a-button
-        >
-      </a-form-item>
-      <div class="user-login-other">
-        <span>其他登录方式</span>
-        <a>
-          <a-icon class="item-icon" type="alipay-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="taobao-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
-        <router-link class="register" :to="{ name: 'register' }"
-          >注册账户</router-link
-        >
-      </div>
-    </a-form>
+                  登录
+                </a-button>
+              </a-form-model-item>
+            </a-form-model>
+          </div>
+        </a-col>
+      </a-row>
+    </div>
   </div>
 </template>
 
 <script>
-import md5 from 'md5'
 import { mapActions } from "vuex";
 import { timeFix } from "@/utils/util";
-
 export default {
   data() {
     return {
-      timeFix: timeFix(),
-      customActiveKey: "tab1",
-      loginBtn: false,
-      // login type: 0 email, 1 username, 2 telephone
-
-      isLoginError: false,
-      form: this.$form.createForm(this),
-      state: {
-        time: 60,
-        loginBtn: false,
-        // login type: 0 email, 1 username, 2 telephone
+      loginBtnLoading: false,
+      form: {
+        username: "",
+        password: "",
+      },
+      rules: {
+        username: [
+          { required: true, message: "输入学号/工号", trigger: "blur" },
+        ],
+        password: [{ required: true, message: "输入密码", trigger: "blur" }],
       },
     };
   },
   methods: {
-    ...mapActions(["Login", "Logout"]),
-    handleTabClick(key) {
-      this.customActiveKey = key;
-    },
-    handleSubmit(e) {
-      e.preventDefault();
-      const {
-        form: { validateFields },
-        state,
-        customActiveKey,
-        Login,
-      } = this;
-
-      state.loginBtn = true;
-
-      const validateFieldsKey =
-        customActiveKey === "tab1"
-          ? ["username", "password"]
-          : ["mobile", "captcha"];
-
-      validateFields(
-        validateFieldsKey,
-        {
-          force: true,
-        },
-        (err, values) => {
-          if (!err) {
-            const loginParams = {
-              ...values,
-            };
-            delete loginParams.username;
-            loginParams["username"] = values.username;
-            loginParams.password = md5(values.password);
-            Login(loginParams)
-              .then((res) => this.loginSuccess(res))
-              .catch((err) => this.requestFailed(err))
-              .finally(() => {
-                state.loginBtn = false;
-              });
-          } else {
-            setTimeout(() => {
-              state.loginBtn = false;
-            }, 600);
-          }
+    ...mapActions(["Login"]),
+    onLoginClick() {
+      this.loginBtnLoading = true;
+      const { form, Login } = this;
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          Login(form).then(() => {
+            this.loginBtnLoading = false;
+            this.onLoginSuccess();
+          });
+        } else {
+          return false;
         }
-      );
-    },
-    // eslint-disable-next-line no-unused-vars
-    loginSuccess(res) {
-      this.$router.push({
-        path: "/",
       });
-      // 延迟 1 秒显示欢迎信息
+    },
+    onLoginSuccess() {
+      this.$notification.success({
+        message: "欢迎",
+        description: `${timeFix()}，欢迎回来，现在进入首页`,
+      });
+
+      // 延迟 1 秒进入主页
       setTimeout(() => {
-        this.$notification.success({
-          message: "欢迎",
-          description: `${timeFix()}，欢迎回来`,
+        this.$router.push({
+          path: "/",
         });
       }, 1000);
-      this.isLoginError = false;
-    },
-    requestFailed(err) {
-      this.isLoginError = true;
-      this.$notification["error"]({
-        message: "错误",
-        description:
-          ((err.response || {}).data || {}).message ||
-          "请求出现错误，请稍后再试",
-        duration: 4,
-      });
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
-.user-layout-login {
-  label {
-    font-size: 14px;
+.login-content {
+  width: 100%;
+  padding-top: 120px;
+
+  .login-content-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .main-title {
+      padding: 0px 0 48px;
+      font-size: 25.6px;
+      color: #191919;
+    }
   }
-
-  .getCaptcha {
-    display: block;
-    width: 100%;
-    height: 40px;
-  }
-
-  .forge-password {
-    font-size: 14px;
-  }
-
-  button.login-button {
-    padding: 0 15px;
-    font-size: 16px;
-    height: 40px;
-    width: 100%;
-  }
-
-  .user-login-other {
-    text-align: left;
-    margin-top: 24px;
-    line-height: 22px;
-
-    .item-icon {
-      font-size: 24px;
-      color: rgba(0, 0, 0, 0.2);
-      margin-left: 16px;
-      vertical-align: middle;
-      cursor: pointer;
-      transition: color 0.3s;
-
-      &:hover {
-        color: #1890ff;
+  .login-content-main {
+    padding: 0 18px;
+    .qcode-wrap {
+      width: 50%;
+      margin-left: 50%;
+      @media screen and (max-width: 1024px) {
+        width: 100%;
+        margin: 0 auto;
+      }
+      .qcode-img {
+        width: 200px;
+        height: 200px;
+        padding: 20px;
+        margin: 0 auto;
+        background: #f7f7f7;
+        border-radius: 8px;
+      }
+      .qcode-footer {
+        margin: 50px 0 0;
+        font-size: 12px;
+        color: #838383;
+        text-align: center;
       }
     }
-
-    .register {
-      float: right;
+    .divider {
+      height: 240px;
+      background: #d9d9d9;
+    }
+    /deep/ .login-form-wrap {
+      width: 50%;
+      @media screen and (max-width: 1024px) {
+        width: 100%;
+        margin: 0 auto;
+      }
+      .login-form {
+        margin: 0 auto;
+        .ant-form-explain {
+          text-align: left;
+        }
+        .ant-input {
+          width: 100%;
+          height: 48px;
+          padding-left: 20px;
+        }
+        .login-form-button {
+          margin: 32px 0 0;
+          width: 100%;
+          height: 48px;
+          font-size: 18px;
+          font-weight: 700;
+          color: #fff;
+          cursor: pointer;
+        }
+      }
     }
   }
 }
