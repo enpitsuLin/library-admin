@@ -1,5 +1,9 @@
 import storage from 'store'
-import { login, logout, validate } from '@/api/user'
+import {
+    login,
+    logout,
+    validate
+} from '@/api/user';
 // import { welcome } from '@/utils/util'
 
 const user = {
@@ -7,7 +11,7 @@ const user = {
         token: '',
         name: '',
         role: '',
-        avatar: '',
+        avatar: ''
     },
 
     mutations: {
@@ -27,57 +31,82 @@ const user = {
 
     actions: {
         // 登录
-        Login({ commit }, { username, password }) {
+        Login({
+            commit
+        }, {
+            username,
+            password
+        }) {
             return new Promise((resolve, reject) => {
-                login({ username, password }).then(res => {
-                    const result = res.data
-                    storage.set('authorization', result.token, 7 * 24 * 60 * 60 * 1000)
-                    commit('SET_TOKEN', result.token)
-                    commit('SET_NAME', result.name)
-                    commit('SET_AVATAR', result.avatar)
-                    resolve(res.data)
-                }).catch(error => {
-                    reject(error)
-                })
+                login({
+                        username,
+                        password
+                    })
+                    .then(res => {
+                        const result = res.data
+                        storage.set('authorization', result.token, 7 * 24 * 60 * 60 * 1000)
+                        commit('SET_TOKEN', result.token)
+                        commit('SET_NAME', result.name)
+                        commit('SET_AVATAR', result.avatar)
+                        resolve(res.data)
+                    })
+                    .catch(error => {
+                        reject(error)
+                    })
             })
         },
         // 登出
-        Logout({ commit, state }) {
-            return new Promise((resolve) => {
-                logout(state.token).then(() => {
-                    commit('SET_TOKEN', '')
-                    storage.remove('authorization')
-                    resolve()
-                }).catch(() => {
-                    resolve()
-                }).finally(() => { })
+        Logout({
+            commit,
+            state
+        }) {
+            return new Promise(resolve => {
+                logout(state.token)
+                    .then(() => {
+                        commit('SET_TOKEN', '')
+                        storage.remove('authorization')
+                        resolve()
+                    })
+                    .catch(() => {
+                        // 登出无视任何借口情况
+                        commit('SET_TOKEN', '')
+                        storage.remove('authorization')
+                        resolve()
+                    })
+                    .finally(() => {})
             })
         },
         // 校验
-        Validate({ commit }) {
+        Validate({
+            commit
+        }) {
             return new Promise((resolve, reject) => {
-                validate().then((res) => {
-                    const result = res.data
-                    storage.set('authorization', result.token, 7 * 24 * 60 * 60 * 1000)
-                    commit('SET_TOKEN', result.token)
-                    commit('SET_NAME', result.name)
-                    commit('SET_AVATAR', result.avatar)
-                    resolve(res.data)
-                }).catch(error => {
-                    reject(error)
-                })
+                validate()
+                    .then(res => {
+                        const result = res.data
+                        storage.set('authorization', result.token, 7 * 24 * 60 * 60 * 1000)
+                        commit('SET_TOKEN', result.token)
+                        commit('SET_NAME', result.name)
+                        commit('SET_AVATAR', result.avatar)
+                        resolve(res.data)
+                    })
+                    .catch(error => {
+                        reject(error)
+                    })
             })
         }
     },
     getters: {
         isLogin(state) {
-            return state.token != "";
+            return state.token != ''
         },
         CurrentUser(state) {
-            let avatarsrc = (state.avatar == "" || state.avatar == undefined) ?
-                "/uploads/avatar/defualt" :
-                `/uploads/avatar/${state.avatar}`;
-            return { name: state.name, avatar: avatarsrc, role: state.role };
+            let avatarsrc = state.avatar == '' || state.avatar == undefined ? '/uploads/avatar/defualt' : `/uploads/avatar/${state.avatar}`
+            return {
+                name: state.name,
+                avatar: avatarsrc,
+                role: state.role
+            }
         }
     }
 }
