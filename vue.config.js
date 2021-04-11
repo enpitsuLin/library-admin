@@ -23,29 +23,29 @@ module.exports = {
                 return args;
             })
     },
-    devServer: {
-        port: 8080,
-        proxy: {
-            '/api': {
-                target: 'http://localhost:3000',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/api': ''
-                }
-            },
-            '/uploads': {
-                target: 'http://localhost:3000/uploads',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/uploads': ''
-                }
-            }
-        },
-        overlay: {
-            warnings: false,
-            errors: false
-        },
-
+devServer: {
+    port: 8080,
+proxy: {
+    '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        pathRewrite: {
+            '^/api': ''
+        }
     },
+    '/uploads': {
+        target: 'http://localhost:3000/uploads',
+        changeOrigin: true,
+        pathRewrite: {
+            '^/uploads': ''
+        }
+    }
+},
+    overlay: {
+        warnings: false,
+        errors: false
+    },
+
+},
     lintOnSave: false
 }

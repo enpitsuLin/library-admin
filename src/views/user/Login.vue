@@ -20,12 +20,7 @@
         </a-col>
         <a-col :xs="{ span: 24 }" :md="{ span: 11 }">
           <div class="login-form-wrap">
-            <a-form-model
-              ref="loginForm"
-              class="login-form"
-              :model="form"
-              :rules="rules"
-            >
+            <a-form-model ref="loginForm" class="login-form" :model="form" :rules="rules">
               <a-form-model-item prop="username">
                 <a-input v-model="form.username" />
               </a-form-model-item>
@@ -51,55 +46,54 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { timeFix } from "@/utils/util";
+import { mapActions } from 'vuex'
+import { timeFix } from '@/utils/util'
 export default {
   data() {
     return {
       loginBtnLoading: false,
       form: {
-        username: "",
-        password: "",
+        username: '',
+        password: ''
       },
       rules: {
-        username: [
-          { required: true, message: "输入学号/工号", trigger: "blur" },
-        ],
-        password: [{ required: true, message: "输入密码", trigger: "blur" }],
-      },
-    };
+        username: [{ required: true, message: '输入学号/工号', trigger: 'blur' }],
+        password: [{ required: true, message: '输入密码', trigger: 'blur' }]
+      }
+    }
   },
   methods: {
-    ...mapActions(["Login"]),
+    ...mapActions(['Login']),
     onLoginClick() {
-      this.loginBtnLoading = true;
-      const { form, Login } = this;
+      this.loginBtnLoading = true
+      const { form, Login } = this
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           Login(form).then(() => {
-            this.loginBtnLoading = false;
-            this.onLoginSuccess();
-          });
+            this.loginBtnLoading = false
+            this.onLoginSuccess()
+          })
         } else {
-          return false;
+          this.loginBtnLoading = false
+          return false
         }
-      });
+      })
     },
     onLoginSuccess() {
       this.$notification.success({
-        message: "欢迎",
-        description: `${timeFix()}，欢迎回来，现在进入首页`,
-      });
+        message: '欢迎',
+        description: `${timeFix()}，欢迎回来，现在进入首页`
+      })
 
       // 延迟 1 秒进入主页
       setTimeout(() => {
         this.$router.push({
-          path: "/",
-        });
-      }, 1000);
-    },
-  },
-};
+          path: '/'
+        })
+      }, 1000)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

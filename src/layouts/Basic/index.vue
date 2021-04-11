@@ -19,7 +19,7 @@
           <a-icon
             type="reload"
             style="font-size: 18px; cursor: pointer"
-            @click="$router.replace($route.path)"
+            @click="windows.reload()"
           />
         </a-tooltip>
       </div>
@@ -31,16 +31,15 @@
   </pro-layout>
 </template>
 <script>
-import ProLayout from "@ant-design-vue/pro-layout";
-import RightContent from "@/components/Header/RightContent";
-import { asyncRouterMap } from "@/router/routes/";
-
+import ProLayout from '@ant-design-vue/pro-layout'
+import RightContent from '@/components/Header/RightContent'
+import { asyncRouterMap } from '@/router/routes/'
 
 export default {
-  name: "BasicLayout",
+  name: 'BasicLayout',
   components: {
     ProLayout,
-    RightContent,
+    RightContent
   },
   data() {
     return {
@@ -48,55 +47,55 @@ export default {
       menus: [],
       // 侧栏收起状态
       collapsed: false,
-      title: "Library admin",
+      title: 'Library admin',
       // 媒体查询
       query: {},
       // 是否手机模式
-      isMobile: false,
-    };
-  },
-  created() {
-    const routes = asyncRouterMap.find((item) => item.path === "/");
-    this.menus = (routes && routes.children) || [];
-    // 处理侧栏收起状态
-    this.$watch("collapsed", () => {
-      this.$store.commit("sidebar_type", this.collapsed);
-    });
-    this.$watch("isMobile", () => {
-      this.$store.commit("is_mobile", this.isMobile);
-    });
-  },
-  mounted() {
-    const userAgent = navigator.userAgent;
-    if (userAgent.indexOf("Edge") > -1) {
-      this.$nextTick(() => {
-        this.collapsed = !this.collapsed;
-        setTimeout(() => {
-          this.collapsed = !this.collapsed;
-        }, 16);
-      });
+      isMobile: false
     }
   },
-  
+  created() {
+    const routes = asyncRouterMap.find((item) => item.path === '/')
+    this.menus = (routes && routes.children) || []
+    // 处理侧栏收起状态
+    this.$watch('collapsed', () => {
+      this.$store.commit('sidebar_type', this.collapsed)
+    })
+    this.$watch('isMobile', () => {
+      this.$store.commit('is_mobile', this.isMobile)
+    })
+  },
+  mounted() {
+    const userAgent = navigator.userAgent
+    if (userAgent.indexOf('Edge') > -1) {
+      this.$nextTick(() => {
+        this.collapsed = !this.collapsed
+        setTimeout(() => {
+          this.collapsed = !this.collapsed
+        }, 16)
+      })
+    }
+  },
+
   methods: {
     handleMediaQuery(query) {
-      this.query = query;
-      if (this.isMobile && !query["screen-xs"]) {
-        this.isMobile = false;
-        return;
+      this.query = query
+      if (this.isMobile && !query['screen-xs']) {
+        this.isMobile = false
+        return
       }
-      if (!this.isMobile && query["screen-xs"]) {
-        this.isMobile = true;
-        this.collapsed = false;
+      if (!this.isMobile && query['screen-xs']) {
+        this.isMobile = true
+        this.collapsed = false
       }
     },
     handleCollapse(collapsed) {
-      this.collapsed = collapsed;
-    },
-  },
-};
+      this.collapsed = collapsed
+    }
+  }
+}
 </script>
 
 <style lang="less">
-@import "./index.less";
+@import './index.less';
 </style>
