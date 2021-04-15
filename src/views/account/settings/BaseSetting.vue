@@ -15,12 +15,7 @@
         </div>
       </a-col>
       <a-col :md="24" :lg="{ span: '16', pull: '8' }">
-        <a-form-model
-          ref="settingForm"
-          layout="vertical"
-          :model="form"
-          :rules="rules"
-        >
+        <a-form-model ref="settingForm" layout="vertical" :model="form" :rules="rules">
           <a-form-model-item label="昵称">
             <a-input v-model="form.name" />
           </a-form-model-item>
@@ -39,10 +34,13 @@
             </a-col>
             <a-col span="15" offset="1">
               <a-form-model-item label="电子邮件">
-                <a-input v-model="form.email"></a-input>
+                <a-input v-model="form.email" />
               </a-form-model-item>
             </a-col>
           </a-row>
+          <a-form-model-item label="联系电话">
+            <a-input v-model="form.phone" />
+          </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" :loading="loading" @click="onSaveClick()">
               <span>保存</span>
@@ -56,55 +54,57 @@
 </template>
 
 <script>
-import AvatarModal from "./AvatarModal";
-import { mapGetters } from "vuex";
+import AvatarModal from './AvatarModal'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    AvatarModal,
+    AvatarModal
   },
   data() {
     return {
       loading: false,
-      form: { name: "", sex: 0, email: "", intro: "", avatar: "" },
+      form: { name: '', sex: 0, email: '', intro: '', avatar: '', phone: '' },
       rules: {
-        name: [{ required: true, message: "输入昵称", trigger: "blur" }],
+        name: [{ required: true, message: '输入昵称', trigger: 'blur' }]
       },
       // 缓存用于修改头像
-      currentUser: {},
-    };
+      currentUser: {}
+    }
   },
   computed: {
-    ...mapGetters(["CurrentUser"]),
+    ...mapGetters(['CurrentUser'])
   },
   created() {},
   mounted() {
-    this.currentUser = JSON.parse(JSON.stringify(this.CurrentUser));
+    this.currentUser = JSON.parse(JSON.stringify(this.CurrentUser))
   },
   methods: {
     onSaveClick() {
-      this.loading = true;
+      this.loading = true
       this.$refs.settingForm.validate((valid) => {
         if (valid) {
-          console.log(this.form);
-          this.$message.success("修改成功");
-          this.loading = false;
+          setTimeout(() => {
+            console.log(this.form)
+            this.$message.success('修改成功')
+            this.loading = false
+          }, 1000)
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     setavatar(avatar) {
-      if (!(avatar == "" || avatar == undefined)) {
-        let avatarsrc = `/uploads/avatar/${avatar}`;
-        this.currentUser.avatar = avatarsrc;
-        this.form.avatar = avatar;
+      if (!(avatar == '' || avatar == undefined)) {
+        let avatarsrc = `/uploads/avatar/${avatar}`
+        this.currentUser.avatar = avatarsrc
+        this.form.avatar = avatar
       }
 
       // this.$store.commit("SET_AVATAR", url);
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

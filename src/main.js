@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import './core/usage.js'
+import './core/use.js'
 import store from './store'
 import router from './router'
 

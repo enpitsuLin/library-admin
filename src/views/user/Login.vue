@@ -69,10 +69,20 @@ export default {
       const { form, Login } = this
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          Login(form).then(() => {
-            this.loginBtnLoading = false
-            this.onLoginSuccess()
-          })
+          Login(form)
+            .then(() => {
+              this.loginBtnLoading = false
+              this.onLoginSuccess()
+            })
+            .catch((err) => {
+              if (err.code == 401) {
+                this.$notification.error({
+                  message: '错误',
+                  description: `${err.message}!`
+                })
+              }
+              this.loginBtnLoading = false
+            })
         } else {
           this.loginBtnLoading = false
           return false

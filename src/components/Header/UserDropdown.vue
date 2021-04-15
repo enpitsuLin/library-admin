@@ -35,64 +35,64 @@
 </template>
 
 <script>
-import { Modal } from "ant-design-vue";
+import { Modal } from 'ant-design-vue'
 
 export default {
-  name: "UserDropdown",
+  name: 'UserDropdown',
   props: {
     currentUser: {
       type: Object,
-      default: () => null,
+      default: () => null
     },
     menu: {
       type: Boolean,
-      default: true,
+      default: true
     },
     hideAvatar: {
       type: Boolean,
-      default: false,
+      default: false
     },
     menuList: {
       type: Array,
       default: () => {
         return [
           {
-            label: "进入系统",
-            route: "/dashboard",
-            icon: "desktop",
+            label: '进入系统',
+            route: '/workplace',
+            icon: 'desktop'
           },
           {
-            label: "个人设置",
-            route: "/account/settings",
-            icon: "setting",
-          },
-        ];
-      },
-    },
+            label: '个人设置',
+            route: '/account/settings',
+            icon: 'setting'
+          }
+        ]
+      }
+    }
   },
 
   methods: {
     // eslint-disable-next-line
     handleLogout(e) {
       Modal.confirm({
-        title: "提示",
-        content: "确定要登出吗?",
-        okText: "确定",
-        cancelText: "取消",
+        title: '提示',
+        content: '确定要登出吗?',
+        okText: '确定',
+        cancelText: '取消',
         onOk: () => {
-          return this.$store.dispatch("Logout").then(() => {
-            this.$router.push("/home");
-          });
+          return this.$store.dispatch('Logout').then(() => {
+            this.$router.push('/home')
+          })
         },
-        onCancel() {},
-      });
-    },
-  },
-};
+        onCancel() {}
+      })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
-@import "../../style/theme";
+@import '../../style/theme';
 .header-drop-down-name {
   font-size: 13px;
   cursor: pointer;

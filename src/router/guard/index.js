@@ -26,24 +26,9 @@ export function createGuard(router) {
                 });
                 NProgress.done()
             } else {
-                // 校验token
+                // 校验token Unauthorized处理在路由守卫
                 store.dispatch('Validate').then((ret) => {
                     next()
-                }).catch((err) => {
-                    /* 应该写入请求拦截 但暂时这样处理 */
-                    console.log(err);
-                    notification.error({
-                        message: err,
-                        description: "用户验证过期,返回登录"
-                    });
-                    store.dispatch('Logout').then(() => {
-                        next({
-                            path: loginPath,
-                            query: {
-                                redirect: to.fullPath
-                            }
-                        });
-                    })
                 })
             }
         } else {
