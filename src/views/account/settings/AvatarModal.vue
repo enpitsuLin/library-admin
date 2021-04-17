@@ -32,11 +32,7 @@
     <br />
     <a-row>
       <a-col :xs="8" :md="6">
-        <a-upload
-          name="avatar"
-          :beforeUpload="beforeUpload"
-          :showUploadList="false"
-        >
+        <a-upload name="avatar" :beforeUpload="beforeUpload" :showUploadList="false">
           <a-button icon="upload">选择图片</a-button>
         </a-upload>
       </a-col>
@@ -59,105 +55,107 @@
 export default {
   data() {
     return {
+      fileName: '',
       visible: false,
       id: null,
       confirmLoading: false,
       fileList: [],
       uploading: false,
       options: {
-        img: "",
+        img: '',
         autoCrop: true,
         autoCropWidth: 200,
         autoCropHeight: 200,
-        outputType: "jpeg",
-        fixedBox: true,
+        outputType: 'jpeg',
+        fixedBox: true
       },
-      previews: {},
-    };
+      previews: {}
+    }
   },
   methods: {
     edit(id) {
-      this.visible = true;
-      this.id = id;
+      this.visible = true
+      this.id = id
     },
     close() {
-      this.id = null;
-      this.visible = false;
+      this.id = null
+      this.visible = false
     },
     cancelHandel() {
-      this.close();
+      this.close()
     },
     changeScale(num) {
-      num = num || 1;
-      this.$refs.cropper.changeScale(num);
+      num = num || 1
+      this.$refs.cropper.changeScale(num)
     },
     rotateLeft() {
-      this.$refs.cropper.rotateLeft();
+      this.$refs.cropper.rotateLeft()
     },
     rotateRight() {
-      this.$refs.cropper.rotateRight();
+      this.$refs.cropper.rotateRight()
     },
     beforeUpload(file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      this.fileName = file.name
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
       reader.onload = () => {
-        this.options.img = reader.result;
-      };
-      return false;
+        this.options.img = reader.result
+      }
+      return false
     },
 
     // 上传图片（点击上传按钮）
     finish(type) {
-      const _this = this;
-      const formData = new FormData();
+      const _this = this
+      const formData = new FormData()
       // 输出
-      if (type === "blob") {
+      if (type === 'blob') {
         this.$refs.cropper.getCropBlob((data) => {
-          const img = window.URL.createObjectURL(data);
-          this.model = true;
-          this.modelSrc = img;
+          const img = window.URL.createObjectURL(data)
+          this.model = true
+          this.modelSrc = img
 
-          formData.append("avatar", data, this.fileName);
+          formData.append('avatar', data, this.fileName)
           this.$http
-            .post("/uploads/avatar", formData, {
+            .post('/uploads/avatar', formData, {
               contentType: false,
               processData: false,
               headers: {
-                "Content-Type": "multipart/form-data",
-              },
+                'Content-Type': 'multipart/form-data'
+              }
             })
             .then((res) => {
               if (res.code === 200) {
-                _this.$message.success("上传成功");
-                _this.$emit("ok", res.data.filename);
-                _this.visible = false;
-                _this.options.img = "";
+                _this.$message.success('上传成功')
+                _this.$emit('ok', res.data.filename)
+                _this.visible = false
+                _this.options.img = ''
               }
-            });
-        });
+            })
+        })
       } else {
         this.$refs.cropper.getCropData((data) => {
-          this.model = true;
-          this.modelSrc = data;
-        });
+          this.model = true
+          this.modelSrc = data
+        })
       }
     },
     okHandel() {
-      const vm = this;
+      const vm = this
 
-      vm.confirmLoading = true;
+      vm.confirmLoading = true
       setTimeout(() => {
-        vm.confirmLoading = false;
-        vm.close();
-        vm.$message.success("上传头像成功");
-      }, 2000);
+        vm.confirmLoading = false
+        vm.close()
+        vm.$message.success('上传头像成功')
+      }, 2000)
     },
 
     realTime(data) {
-      this.previews = data;
-    },
-  },
-};
+      this.previews = data
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
